@@ -52,8 +52,7 @@ public abstract class AbstractBike {
 
 	@Override
 	public String toString() {
-		return "AbstractBike{" +
-				"brand='" + brand + '\'' +
+		return "{brand='" + brand + '\'' +
 				", weight=" + weight +
 				", hasLights=" + hasLights +
 				", color='" + color + '\'' +

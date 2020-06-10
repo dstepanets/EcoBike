@@ -1,21 +1,22 @@
 package com.qualityunit.ecobike.service;
 
 import com.qualityunit.ecobike.model.AbstractBike;
-import com.qualityunit.ecobike.model.Ebike;
+import com.qualityunit.ecobike.model.BikeType;
+import com.qualityunit.ecobike.model.ElectricBike;
 import com.qualityunit.ecobike.model.FoldingBike;
-import com.qualityunit.ecobike.model.Speedelec;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+import static com.qualityunit.ecobike.model.BikeType.*;
 import static java.lang.System.*;
 
 public class FileParser {
 	private static final String ERROR_MSG = "Error during input file parsing. Line #%d was ignored:\n'%s'";
-	private static final String TYPE_BRAND_REGEX = "(" + FoldingBike.IDENTIFIER + "|"
-														+ Ebike.IDENTIFIER + "|"
-														+ Speedelec.IDENTIFIER + ")"
+	private static final String TYPE_BRAND_REGEX = "(" + FOLDING_BIKE.toString() + "|"
+														+ EBIKE.toString() + "|"
+														+ SPEEDELEC.toString() + ")"
 														+ " (.+$)";
 	private String currentLine;
 	private long lineCount;
@@ -44,11 +45,13 @@ public class FileParser {
 		});
 	}
 
-	private void convertLineToObject(String bikeType, String brandName, String[] arr) {
+//	TODO Implement validation and exception mechanism
+	private void convertLineToObject(String bikeTypeId, String brandName, String[] arr) {
 		AbstractBike bike = null;
+		BikeType bikeType = BikeType.fromString(bikeTypeId);
 		try {
 			switch (bikeType) {
-				case FoldingBike.IDENTIFIER:
+				case FOLDING_BIKE:
 					bike = FoldingBike.getBuilder()
 							.withBrand(brandName)
 							.withWheelSize(Integer.parseInt(arr[1]))
@@ -59,19 +62,10 @@ public class FileParser {
 							.withPrice(Integer.parseInt(arr[6]))
 							.build();
 					break;
-				case Ebike.IDENTIFIER:
-					bike = Ebike.getBuilder()
-							.withBrand(brandName)
-							.withMaxSpeed(Integer.parseInt(arr[1]))
-							.withWeight(Integer.parseInt(arr[2]))
-							.withHasLights(Boolean.parseBoolean(arr[3]))
-							.withBatteryCapacity(Integer.parseInt(arr[4]))
-							.withColor(arr[5])
-							.withPrice(Integer.parseInt(arr[6]))
-							.build();
-					break;
-				case Speedelec.IDENTIFIER:
-					bike = Speedelec.getBuilder()
+				case EBIKE:
+				case SPEEDELEC:
+					bike = ElectricBike.getBuilder()
+							.withBikeType(bikeType)
 							.withBrand(brandName)
 							.withMaxSpeed(Integer.parseInt(arr[1]))
 							.withWeight(Integer.parseInt(arr[2]))

@@ -1,7 +1,6 @@
 package com.qualityunit.ecobike.model;
 
 public class FoldingBike extends AbstractBike {
-	public static final String IDENTIFIER = "FOLDING BIKE";
 	private int wheelSize;
 	private int gearsNum;
 
@@ -19,13 +18,13 @@ public class FoldingBike extends AbstractBike {
 		private int wheelSize;
 		private int gearsNum;
 
+		public FoldingBike build() {
+			return new FoldingBike(this);
+		}
+
 		@Override
 		protected FoldingBikeBuilder getThis() {
 			return this;
-		}
-
-		public FoldingBike build() {
-			return new FoldingBike(this);
 		}
 
 		public FoldingBikeBuilder withWheelSize(int wheelSize) {

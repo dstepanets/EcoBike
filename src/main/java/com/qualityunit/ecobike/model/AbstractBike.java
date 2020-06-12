@@ -1,13 +1,17 @@
 package com.qualityunit.ecobike.model;
 
+import java.util.Objects;
+
 public abstract class AbstractBike {
-	protected String brand;
-	protected int weight;
-	protected boolean hasLights;
-	protected String color;
-	protected int price;
+	private final BikeType bikeType;
+	private final String brand;
+	private final Integer weight;
+	private final Boolean hasLights;
+	private final String color;
+	private final Integer price;
 
 	protected <T extends BikeBuilder<T>> AbstractBike(BikeBuilder<T> builder) {
+		this.bikeType = builder.bikeType;
 		this.brand = builder.brand;
 		this.weight = builder.weight;
 		this.hasLights = builder.hasLights;
@@ -16,25 +20,31 @@ public abstract class AbstractBike {
 	}
 
 	protected abstract static class BikeBuilder<T extends BikeBuilder<T>> {
+		private BikeType bikeType;
 		private String brand;
-		private int weight;
-		private boolean hasLights;
+		private Integer weight;
+		private Boolean hasLights;
 		private String color;
-		private int price;
+		private Integer price;
 
 		protected abstract T getThis();
+
+		public T withBikeType(BikeType bikeType) {
+			this.bikeType = bikeType;
+			return getThis();
+		}
 
 		public T withBrand(String brand) {
 			this.brand = brand;
 			return getThis();
 		}
 
-		public T withWeight(int weight) {
+		public T withWeight(Integer weight) {
 			this.weight = weight;
 			return getThis();
 		}
 
-		public T withHasLights(boolean hasLights) {
+		public T withHasLights(Boolean hasLights) {
 			this.hasLights = hasLights;
 			return getThis();
 		}
@@ -44,19 +54,50 @@ public abstract class AbstractBike {
 			return getThis();
 		}
 
-		public T withPrice(int price) {
+		public T withPrice(Integer price) {
 			this.price = price;
 			return getThis();
 		}
 	}
 
+	public Boolean getHasLights() {
+		return hasLights;
+	}
+
+	public Integer getPrice() {
+		return price;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		AbstractBike bike = (AbstractBike) o;
+		return bikeType == bike.bikeType &&
+				brand.equals(bike.brand) &&
+				weight.equals(bike.weight) &&
+				hasLights.equals(bike.hasLights) &&
+				color.equals(bike.color) &&
+				price.equals(bike.price);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(bikeType, brand, weight, hasLights, color, price);
+	}
+
 	@Override
 	public String toString() {
-		return "{brand='" + brand + '\'' +
+		return "{bikeType=" + bikeType +
+				", brand='" + brand + '\'' +
 				", weight=" + weight +
 				", hasLights=" + hasLights +
 				", color='" + color + '\'' +
 				", price=" + price +
 				'}';
+	}
+
+	public String toDisplayFormatString() {
+		return bikeType.toString() + " " + this.brand;
 	}
 }

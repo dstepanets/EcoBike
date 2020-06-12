@@ -1,6 +1,13 @@
 .idea
+*.iml
+*.ipr
+
+doc
+ecobike.txt
+
 
 # Compiled class file
+target
 *.class
 
 # Log file

@@ -4,7 +4,11 @@ import com.qualityunit.ecobike.model.AbstractBike;
 import com.qualityunit.ecobike.model.BikeType;
 import com.qualityunit.ecobike.model.ElectricBike;
 import com.qualityunit.ecobike.model.FoldingBike;
+import com.qualityunit.ecobike.model.Storage;
 
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -13,7 +17,8 @@ import static com.qualityunit.ecobike.model.BikeType.*;
 import static java.lang.System.*;
 
 public class FileParser {
-	private static final String ERROR_MSG = "Error during input file parsing. Line #%d was ignored:\n'%s'";
+	private static final String ERROR_LINE_MSG = "Error during input file parsing. Line #%d was ignored:\n'%s'";
+	private static final String ERROR_MSG = "Error message: '%s'";
 	private static final String TYPE_BRAND_REGEX = "(" + FOLDING_BIKE.toString() + "|"
 														+ EBIKE.toString() + "|"
 														+ SPEEDELEC.toString() + ")"
@@ -21,10 +26,10 @@ public class FileParser {
 	private String currentLine;
 	private long lineCount;
 
-	public void parseFileLinesStream(Stream<String> stream) {
+	public void parseLinesStream(Stream<String> stream) {
 		lineCount = 0;
 		final Pattern pattern = Pattern.compile(TYPE_BRAND_REGEX);
-//		final Pattern pattern = Pattern.compile("([A-Z \\-]+)([A-Z].*)");
+		final List<AbstractBike> bikesCatalog = Storage.getInstance().getCatalog();
 		stream.forEach(ln -> {
 			lineCount++;
 			currentLine = ln;
@@ -38,21 +43,26 @@ public class FileParser {
 				String brandName = matcher.group(2);
 				out.println("--> [" + bikeType + "]");
 				out.println("--> [" + brandName + "]");
-				convertLineToObject(bikeType, brandName, arr);
+				AbstractBike bike = buildBikeFromLine(bikeType, brandName, arr);
+				if (bike != null) {
+					bikesCatalog.add(bike);
+				}
 			} else {
-				err.println(String.format(ERROR_MSG, lineCount, currentLine));
+				err.println(String.format(ERROR_LINE_MSG, lineCount, currentLine));
+				err.println(String.format(ERROR_MSG, "No such bike type found"));
 			}
 		});
 	}
 
 //	TODO Implement validation and exception mechanism
-	private void convertLineToObject(String bikeTypeId, String brandName, String[] arr) {
+	private AbstractBike buildBikeFromLine(String bikeTypeId, String brandName, String[] arr) {
 		AbstractBike bike = null;
-		BikeType bikeType = BikeType.fromString(bikeTypeId);
 		try {
+			BikeType bikeType = BikeType.fromString(bikeTypeId);
 			switch (bikeType) {
 				case FOLDING_BIKE:
 					bike = FoldingBike.getBuilder()
+							.withBikeType(bikeType)
 							.withBrand(brandName)
 							.withWheelSize(Integer.parseInt(arr[1]))
 							.withGearsNum(Integer.parseInt(arr[2]))
@@ -75,19 +85,16 @@ public class FileParser {
 							.withPrice(Integer.parseInt(arr[6]))
 							.build();
 					break;
-				default:
-					err.println(String.format(ERROR_MSG, lineCount, currentLine));
 			}
-		} catch (IndexOutOfBoundsException | NumberFormatException e) {
-			err.println(String.format(ERROR_MSG, lineCount, currentLine));
+		} catch (FileParsingException | IndexOutOfBoundsException | IllegalArgumentException e) {
+			err.println(String.format(ERROR_LINE_MSG, lineCount, currentLine));
+			err.println(String.format(ERROR_MSG, e.getMessage()));
 		}
 
 		if (bike != null) {
 			out.println("====>NEW BIKE! " + bike.toString() + "\n");
 		}
 
-
-
+		return bike;
 	}
-
 }

@@ -2,6 +2,7 @@ package com.qualityunit.ecobike.view;
 
 import java.util.Scanner;
 
+import static java.lang.System.err;
 import static java.lang.System.in;
 import static java.lang.System.out;
 
@@ -20,20 +21,24 @@ public class UserInput {
 			if (prompt != null) {
 				out.println(prompt);
 			}
-			ln = SCAN.nextLine();
-		} while (ln.trim().length() < 1);
+			ln = SCAN.nextLine().trim();
+		} while (ln.length() < 1);
 		return ln;
 	}
 
-//	TODO fix this)
 	public static int getInt(String prompt) {
+		Integer num = null;
 		do {
 			if (prompt != null) {
 				out.println(prompt);
 			}
-			SCAN.nextLine();
-		} while (!SCAN.hasNextInt());
-		return SCAN.nextInt();
+			try {
+				num = Integer.parseInt(SCAN.nextLine());
+			} catch (NumberFormatException e) {
+				err.println("Invalid input");
+			}
+		} while (num == null);
+		return num;
 	}
 
 }

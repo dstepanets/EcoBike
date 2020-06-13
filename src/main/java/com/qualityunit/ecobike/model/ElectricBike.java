@@ -3,8 +3,8 @@ package com.qualityunit.ecobike.model;
 import java.util.Objects;
 
 public class ElectricBike extends AbstractBike {
-	private Integer maxSpeed;
-	private Integer batteryCapacity;
+	private final Integer maxSpeed;
+	private final Integer batteryCapacity;
 
 	protected ElectricBike(ElectricBikeBuilder builder) {
 		super(builder);

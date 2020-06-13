@@ -1,6 +1,5 @@
 package com.qualityunit.ecobike.controller;
 
-import com.qualityunit.ecobike.model.Storage;
 import com.qualityunit.ecobike.service.FileParser;
 import com.qualityunit.ecobike.view.Menu;
 import com.qualityunit.ecobike.view.UserInput;
@@ -16,9 +15,7 @@ import static java.lang.String.format;
 import static java.lang.System.err;
 
 public class AppController {
-	private final Menu menu = new Menu();
 	private final FileParser fileParser = new FileParser();
-	private final Storage storage = Storage.getInstance();
 	private Path inputFilePath;
 
 	public void processInputFile(String[] args) {
@@ -39,11 +36,9 @@ public class AppController {
 	}
 
 	public void runMenu() {
-
+		Menu menu = Menu.getInstance();
 		while (true) {
 			menu.getCommandFromUser().execute();
 		}
-
 	}
-
 }

@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Storage {
-	private List<AbstractBike> catalog;
 	private static Storage storageInstance;
+	private List<AbstractBike> catalog;
 
 	private Storage() {
 		catalog = new ArrayList<>();
 	}
 
-	public static Storage getInstance() {
+	public static synchronized Storage getInstance() {
 		if (storageInstance == null) {
 			storageInstance = new Storage();
 		}

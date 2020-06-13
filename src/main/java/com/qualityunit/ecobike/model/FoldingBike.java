@@ -3,8 +3,8 @@ package com.qualityunit.ecobike.model;
 import java.util.Objects;
 
 public class FoldingBike extends AbstractBike {
-	private Integer wheelSize;
-	private Integer gearsNum;
+	private final Integer wheelSize;
+	private final Integer gearsNum;
 
 	protected FoldingBike(FoldingBikeBuilder builder) {
 		super(builder);

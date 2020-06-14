@@ -1,14 +1,16 @@
 package com.qualityunit.ecobike.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Storage {
 	private static Storage storageInstance;
 	private List<AbstractBike> catalog;
+	private boolean isUpdated = false;
 
 	private Storage() {
-		catalog = new ArrayList<>();
+		catalog = Collections.synchronizedList(new ArrayList<>());
 	}
 
 	public static synchronized Storage getInstance() {
@@ -20,5 +22,14 @@ public class Storage {
 
 	public List<AbstractBike> getCatalog() {
 		return catalog;
+	}
+
+	public void addBike(AbstractBike bike) {
+		catalog.add(bike);
+		isUpdated = true;
+	}
+
+	public boolean isUpdated() {
+		return isUpdated;
 	}
 }

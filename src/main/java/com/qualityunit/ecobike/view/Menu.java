@@ -7,8 +7,12 @@ import com.qualityunit.ecobike.controller.command.MenuCommand;
 import com.qualityunit.ecobike.controller.command.ShowCatalogCommand;
 import com.qualityunit.ecobike.controller.command.StopProgramCommand;
 import com.qualityunit.ecobike.controller.command.WriteToFileCommand;
+import com.qualityunit.ecobike.model.AbstractBike;
 import com.qualityunit.ecobike.model.BikeType;
 import com.qualityunit.ecobike.model.CatalogPage;
+import com.qualityunit.ecobike.model.ElectricBike;
+import com.qualityunit.ecobike.model.FoldingBike;
+import com.qualityunit.ecobike.model.Storage;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -74,7 +78,46 @@ public class Menu {
 		out.println(pageStats);
 		String prompt =
 				"\n('N' - next page | 'P' - previous page | 'M' - back to menu | <number> - go to this page)\n" +
-						"Your command: ";
+					"Your command: ";
 		return UserInput.getLine(prompt);
+	}
+
+	public AbstractBike constructBikeFromUserInput(BikeType bikeType, boolean isSearchQuery) {
+		out.println("NEW " + bikeType.toString());
+		String brandName = UserInput.getLine("Enter its brand name:");
+		int weight = UserInput.getNonNegativeInt("Enter the weight of the bike (in grams):");
+		boolean hasLights = UserInput.getBoolean("Does it have front and back lights?");
+		String color = UserInput.getLine("Enter the color:");
+		int price = UserInput.getNonNegativeInt("Enter the price:");
+
+		AbstractBike bike = null;
+		switch (bikeType) {
+			case FOLDING_BIKE:
+				bike = FoldingBike.getBuilder()
+						.withBikeType(bikeType)
+						.withBrand(brandName)
+						.withWeight(weight)
+						.withHasLights(hasLights)
+						.withColor(color)
+						.withPrice(price)
+						.withWheelSize(UserInput.getNonNegativeInt("Enter the size of the wheels (in inches):"))
+						.withGearsNum(UserInput.getNonNegativeInt("Enter the number of gears:"))
+						.build();
+				break;
+			case EBIKE:
+			case SPEEDELEC:
+				bike = ElectricBike.getBuilder()
+						.withBikeType(bikeType)
+						.withBrand(brandName)
+						.withWeight(weight)
+						.withHasLights(hasLights)
+						.withColor(color)
+						.withPrice(price)
+						.withMaxSpeed(UserInput.getNonNegativeInt("Enter the maximum speed (in km/h):"))
+						.withBatteryCapacity(UserInput.getNonNegativeInt("Enter the battery capacity (in mAh):"))
+						.build();
+				break;
+		}
+		return bike;
 	}
 }

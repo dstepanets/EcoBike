@@ -60,6 +60,22 @@ public abstract class AbstractBike {
 		}
 	}
 
+	public BikeType getBikeType() {
+		return bikeType;
+	}
+
+	public String getBrand() {
+		return brand;
+	}
+
+	public Integer getWeight() {
+		return weight;
+	}
+
+	public String getColor() {
+		return color;
+	}
+
 	public Boolean getHasLights() {
 		return hasLights;
 	}

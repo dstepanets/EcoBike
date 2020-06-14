@@ -8,6 +8,7 @@ import static java.lang.System.out;
 
 public class UserInput {
 	private static final Scanner SCAN = new Scanner(in);
+	private static final String INVALID_INPUT = "Invalid input";
 
 	private UserInput() {}
 
@@ -35,10 +36,35 @@ public class UserInput {
 			try {
 				num = Integer.parseInt(SCAN.nextLine());
 			} catch (NumberFormatException e) {
-				err.println("Invalid input");
+				err.println(INVALID_INPUT);
 			}
 		} while (num == null);
 		return num;
+	}
+
+	public static int getNonNegativeInt(String prompt) {
+		int num;
+		do {
+			num = getInt(prompt);
+			if (num < 0) {
+				err.println("Number can't be negative");
+			}
+		} while (num < 0);
+		return num;
+	}
+
+	public static boolean getBoolean(String prompt) {
+		String ln;
+		do {
+			ln = getLine(prompt + " (y/n):");
+			if (ln.toLowerCase().charAt(0) == 'y') {
+				return true;
+			} else if (ln.toLowerCase().charAt(0) == 'n') {
+				return false;
+			} else {
+				err.println(INVALID_INPUT);
+			}
+		} while (true);
 	}
 
 }

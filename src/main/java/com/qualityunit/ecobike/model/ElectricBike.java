@@ -3,8 +3,8 @@ package com.qualityunit.ecobike.model;
 import java.util.Objects;
 
 public class ElectricBike extends AbstractBike {
-	private final Integer maxSpeed;
-	private final Integer batteryCapacity;
+	private final int maxSpeed;
+	private final int batteryCapacity;
 
 	protected ElectricBike(ElectricBikeBuilder builder) {
 		super(builder);
@@ -17,8 +17,8 @@ public class ElectricBike extends AbstractBike {
 	}
 
 	public static class ElectricBikeBuilder extends BikeBuilder<ElectricBikeBuilder> {
-		private Integer maxSpeed;
-		private Integer batteryCapacity;
+		private int maxSpeed;
+		private int batteryCapacity;
 
 		public AbstractBike build() {
 			return new ElectricBike(this);
@@ -29,12 +29,12 @@ public class ElectricBike extends AbstractBike {
 			return this;
 		}
 
-		public ElectricBikeBuilder withMaxSpeed(Integer maxSpeed) {
+		public ElectricBikeBuilder withMaxSpeed(int maxSpeed) {
 			this.maxSpeed = maxSpeed;
 			return this;
 		}
 
-		public ElectricBikeBuilder withBatteryCapacity(Integer batteryCapacity) {
+		public ElectricBikeBuilder withBatteryCapacity(int batteryCapacity) {
 			this.batteryCapacity = batteryCapacity;
 			return this;
 		}
@@ -46,8 +46,8 @@ public class ElectricBike extends AbstractBike {
 		if (o == null || getClass() != o.getClass()) return false;
 		if (!super.equals(o)) return false;
 		ElectricBike that = (ElectricBike) o;
-		return maxSpeed.equals(that.maxSpeed) &&
-				batteryCapacity.equals(that.batteryCapacity);
+		return maxSpeed == that.maxSpeed &&
+				batteryCapacity == that.batteryCapacity;
 	}
 
 	@Override

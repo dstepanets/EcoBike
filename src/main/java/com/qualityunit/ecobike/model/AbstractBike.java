@@ -5,10 +5,10 @@ import java.util.Objects;
 public abstract class AbstractBike {
 	private final BikeType bikeType;
 	private final String brand;
-	private final Integer weight;
+	private final int weight;
 	private final Boolean hasLights;
 	private final String color;
-	private final Integer price;
+	private final int price;
 
 	protected <T extends BikeBuilder<T>> AbstractBike(BikeBuilder<T> builder) {
 		this.bikeType = builder.bikeType;
@@ -22,10 +22,10 @@ public abstract class AbstractBike {
 	protected abstract static class BikeBuilder<T extends BikeBuilder<T>> {
 		private BikeType bikeType;
 		private String brand;
-		private Integer weight;
+		private int weight;
 		private Boolean hasLights;
 		private String color;
-		private Integer price;
+		private int price;
 
 		protected abstract T getThis();
 
@@ -39,7 +39,7 @@ public abstract class AbstractBike {
 			return getThis();
 		}
 
-		public T withWeight(Integer weight) {
+		public T withWeight(int weight) {
 			this.weight = weight;
 			return getThis();
 		}
@@ -54,7 +54,7 @@ public abstract class AbstractBike {
 			return getThis();
 		}
 
-		public T withPrice(Integer price) {
+		public T withPrice(int price) {
 			this.price = price;
 			return getThis();
 		}
@@ -68,7 +68,7 @@ public abstract class AbstractBike {
 		return brand;
 	}
 
-	public Integer getWeight() {
+	public int getWeight() {
 		return weight;
 	}
 
@@ -80,7 +80,7 @@ public abstract class AbstractBike {
 		return hasLights;
 	}
 
-	public Integer getPrice() {
+	public int getPrice() {
 		return price;
 	}
 
@@ -89,12 +89,12 @@ public abstract class AbstractBike {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		AbstractBike bike = (AbstractBike) o;
-		return bikeType == bike.bikeType &&
+		return weight == bike.weight &&
+				price == bike.price &&
+				bikeType == bike.bikeType &&
 				brand.equals(bike.brand) &&
-				weight.equals(bike.weight) &&
-				hasLights.equals(bike.hasLights) &&
-				color.equals(bike.color) &&
-				price.equals(bike.price);
+				Objects.equals(hasLights, bike.hasLights) &&
+				Objects.equals(color, bike.color);
 	}
 
 	@Override

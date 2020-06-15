@@ -27,14 +27,22 @@ public class UserInput {
 		return ln;
 	}
 
-	public static int getInt(String prompt) {
+	public static String getLineAllowEmpty(String prompt) {
+		if (prompt != null) {
+			out.println(prompt + " (or leave blank)");
+		}
+		return SCAN.nextLine().trim();
+	}
+
+	public static int getInt(String prompt, boolean isOptional) {
 		Integer num = null;
 		do {
-			if (prompt != null) {
-				out.println(prompt);
-			}
 			try {
-				num = Integer.parseInt(SCAN.nextLine());
+				String ln = (isOptional) ? getLineAllowEmpty(prompt) : getLine(prompt);
+				if (isOptional && ln.isEmpty()) {
+					return 0;
+				}
+				num = Integer.parseInt(ln);
 			} catch (NumberFormatException e) {
 				err.println(INVALID_INPUT);
 			}
@@ -42,18 +50,24 @@ public class UserInput {
 		return num;
 	}
 
-	public static int getNonNegativeInt(String prompt) {
+	public static int getIntInRange(String prompt, int min, int max, boolean isOptional) {
 		int num;
 		do {
-			num = getInt(prompt);
-			if (num < 0) {
-				err.println("Number can't be negative");
+			num = getInt(prompt, isOptional);
+			if (isOptional && num == 0) {
+				return 0;
 			}
-		} while (num < 0);
+			if (num < min || num > max) {
+				err.println("Invalid number");
+			}
+		} while (num < min || num > max);
 		return num;
 	}
 
-	public static boolean getBoolean(String prompt) {
+	public static Boolean getBoolean(String prompt, boolean isOptional) {
+		if (isOptional && getLineAllowEmpty(prompt).isEmpty()) {
+			return null;
+		}
 		String ln;
 		do {
 			ln = getLine(prompt + " (y/n):");

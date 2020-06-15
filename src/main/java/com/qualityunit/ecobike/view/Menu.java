@@ -12,11 +12,12 @@ import com.qualityunit.ecobike.model.BikeType;
 import com.qualityunit.ecobike.model.CatalogPage;
 import com.qualityunit.ecobike.model.ElectricBike;
 import com.qualityunit.ecobike.model.FoldingBike;
-import com.qualityunit.ecobike.model.Storage;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static com.qualityunit.ecobike.view.UserInput.*;
 import static java.lang.System.err;
 import static java.lang.System.out;
 
@@ -54,17 +55,10 @@ public class Menu {
 	}
 
 	public Executable getCommandFromUser() {
-		MenuCommand command;
-		do {
-			displayMenu();
-			int choice = UserInput.getInt("Enter a number:");
-			command = numToCommand.get(choice);
-			if (command == null) {
-				err.println("Wrong option");
-			} else {
-				out.println("--> " + command.getDescription());
-			}
-		} while (command == null);
+		displayMenu();
+		int choice = getIntInRange("Enter a number:", 1, numToCommand.size(), false);
+		MenuCommand command = numToCommand.get(choice);
+		out.println("--> " + command.getDescription());
 		return command;
 	}
 
@@ -78,17 +72,22 @@ public class Menu {
 		out.println(pageStats);
 		String prompt =
 				"\n('N' - next page | 'P' - previous page | 'M' - back to menu | <number> - go to this page)\n" +
-					"Your command: ";
-		return UserInput.getLine(prompt);
+						"Your command: ";
+		return getLine(prompt);
 	}
 
 	public AbstractBike constructBikeFromUserInput(BikeType bikeType, boolean isSearchQuery) {
-		out.println("NEW " + bikeType.toString());
-		String brandName = UserInput.getLine("Enter its brand name:");
-		int weight = UserInput.getNonNegativeInt("Enter the weight of the bike (in grams):");
-		boolean hasLights = UserInput.getBoolean("Does it have front and back lights?");
-		String color = UserInput.getLine("Enter the color:");
-		int price = UserInput.getNonNegativeInt("Enter the price:");
+		if (isSearchQuery) {
+			out.println("NEW SEARCH QUERY");
+		} else {
+			out.println("NEW " + bikeType.toString());
+		}
+
+		String brandName = getLine("Enter its brand name:");
+		int weight = getIntInRange("Enter the weight of the bike (in grams):", 0, Integer.MAX_VALUE, isSearchQuery);
+		Boolean hasLights = getBoolean("Does it have front and back lights?", isSearchQuery);
+		String color = isSearchQuery ? getLineAllowEmpty("Enter the color:") : getLine("Enter the color:");
+		int price = getIntInRange("Enter the price:", 0, Integer.MAX_VALUE, isSearchQuery);
 
 		AbstractBike bike = null;
 		switch (bikeType) {
@@ -100,8 +99,10 @@ public class Menu {
 						.withHasLights(hasLights)
 						.withColor(color)
 						.withPrice(price)
-						.withWheelSize(UserInput.getNonNegativeInt("Enter the size of the wheels (in inches):"))
-						.withGearsNum(UserInput.getNonNegativeInt("Enter the number of gears:"))
+						.withWheelSize(getIntInRange("Enter the size of the wheels (in inches):",
+								0, Integer.MAX_VALUE, isSearchQuery))
+						.withGearsNum(getIntInRange("Enter the number of gears:",
+								0, Integer.MAX_VALUE, isSearchQuery))
 						.build();
 				break;
 			case EBIKE:
@@ -113,11 +114,21 @@ public class Menu {
 						.withHasLights(hasLights)
 						.withColor(color)
 						.withPrice(price)
-						.withMaxSpeed(UserInput.getNonNegativeInt("Enter the maximum speed (in km/h):"))
-						.withBatteryCapacity(UserInput.getNonNegativeInt("Enter the battery capacity (in mAh):"))
+						.withMaxSpeed(getIntInRange("Enter the maximum speed (in km/h):",
+								0, Integer.MAX_VALUE, isSearchQuery))
+						.withBatteryCapacity(getIntInRange("Enter the battery capacity (in mAh):",
+								0, Integer.MAX_VALUE, isSearchQuery))
 						.build();
 				break;
 		}
 		return bike;
+	}
+
+	public BikeType chooseBikeType() {
+		BikeType[] bikeTypes = BikeType.values();
+		out.println("Choose the bike type:");
+		Arrays.stream(bikeTypes).forEach(t -> out.println((t.ordinal() + 1) + " - " + t.toString()));
+		int i = getIntInRange("Enter a number:", 1, BikeType.values().length, false);
+		return bikeTypes[i - 1];
 	}
 }

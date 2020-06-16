@@ -45,9 +45,9 @@ public class ElectricBike extends AbstractBike {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		if (!super.equals(o)) return false;
-		ElectricBike that = (ElectricBike) o;
-		return maxSpeed == that.maxSpeed &&
-				batteryCapacity == that.batteryCapacity;
+		ElectricBike other = (ElectricBike) o;
+		return (other.maxSpeed == 0 || maxSpeed == other.maxSpeed) &&
+				(other.batteryCapacity == 0 || batteryCapacity == other.batteryCapacity);
 	}
 
 	@Override

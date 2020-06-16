@@ -45,9 +45,9 @@ public class FoldingBike extends AbstractBike {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		if (!super.equals(o)) return false;
-		FoldingBike that = (FoldingBike) o;
-		return wheelSize == that.wheelSize &&
-				gearsNum == that.gearsNum;
+		FoldingBike other = (FoldingBike) o;
+		return (other.wheelSize == 0 || wheelSize == other.wheelSize) &&
+				(other.gearsNum == 0 || gearsNum == other.gearsNum);
 	}
 
 	@Override

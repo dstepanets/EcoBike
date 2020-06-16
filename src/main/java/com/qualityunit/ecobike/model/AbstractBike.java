@@ -2,7 +2,7 @@ package com.qualityunit.ecobike.model;
 
 import java.util.Objects;
 
-public abstract class AbstractBike {
+public abstract class AbstractBike implements Comparable<AbstractBike> {
 	private final BikeType bikeType;
 	private final String brand;
 	private final int weight;
@@ -88,18 +88,33 @@ public abstract class AbstractBike {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		AbstractBike bike = (AbstractBike) o;
-		return weight == bike.weight &&
-				price == bike.price &&
-				bikeType == bike.bikeType &&
-				brand.equals(bike.brand) &&
-				Objects.equals(hasLights, bike.hasLights) &&
-				Objects.equals(color, bike.color);
+		AbstractBike other = (AbstractBike) o;
+		return bikeType == other.bikeType &&
+				brand.equals(other.brand) &&
+				(other.weight == 0 || weight == other.weight) &&
+				(other.hasLights == null || hasLights == other.hasLights) &&
+				(other.color.isEmpty() || color.equals(other.color)) &&
+				(other.price == 0 || price == other.price);
 	}
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(bikeType, brand, weight, hasLights, color, price);
+	}
+
+	@Override
+	public int compareTo(AbstractBike that) {
+		if (this.bikeType.compareTo(that.bikeType) < 0) {
+			return -1;
+		} else if (this.bikeType.compareTo(that.bikeType) > 0) {
+			return 1;
+		}
+		if (this.brand.compareTo(that.brand) < 0) {
+			return -1;
+		} else if (this.brand.compareTo(that.brand) > 0) {
+			return 1;
+		}
+		return 0;
 	}
 
 	@Override

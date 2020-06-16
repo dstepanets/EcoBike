@@ -16,6 +16,7 @@ import com.qualityunit.ecobike.model.FoldingBike;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.qualityunit.ecobike.view.UserInput.*;
 import static java.lang.System.err;

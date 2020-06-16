@@ -65,13 +65,11 @@ public class UserInput {
 	}
 
 	public static Boolean getBoolean(String prompt, boolean isOptional) {
-		if (isOptional && getLineAllowEmpty(prompt).isEmpty()) {
-			return null;
-		}
-		String ln;
 		do {
-			ln = getLine(prompt + " (y/n):");
-			if (ln.toLowerCase().charAt(0) == 'y') {
+			String ln = isOptional ? getLineAllowEmpty(prompt + " (y/n):") : getLine(prompt + " (y/n):");
+			if (isOptional && ln.isEmpty()) {
+				return null;
+			} else if (ln.toLowerCase().charAt(0) == 'y') {
 				return true;
 			} else if (ln.toLowerCase().charAt(0) == 'n') {
 				return false;

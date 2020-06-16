@@ -1,6 +1,6 @@
 package com.qualityunit.ecobike.view;
 
-import com.qualityunit.ecobike.controller.command.AddBikeCommand;
+import com.qualityunit.ecobike.controller.command.AddItemCommand;
 import com.qualityunit.ecobike.controller.command.Executable;
 import com.qualityunit.ecobike.controller.command.FindItemCommand;
 import com.qualityunit.ecobike.controller.command.MenuCommand;
@@ -18,14 +18,16 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.qualityunit.ecobike.view.UserInput.*;
-import static java.lang.System.err;
+import static com.qualityunit.ecobike.view.UserInput.getBoolean;
+import static com.qualityunit.ecobike.view.UserInput.getIntInRange;
+import static com.qualityunit.ecobike.view.UserInput.getLine;
+import static com.qualityunit.ecobike.view.UserInput.getLineAllowEmpty;
 import static java.lang.System.out;
 
 public class Menu {
 	public static final String FILE_PATH_PROMPT = "Please enter the input file path:";
 	public static final String OPEN_ERROR_MSG = "Can't open a file at this path: '%s'";
-	public static final String SEPARATOR = "- - - - - - - - - - - - - - - - - - - - - - -";
+	public static final String SEPARATOR = "- - - - - - - - - - - - - - - - - - - - - - -\n";
 
 	private static Menu menuInstance;
 	private final Map<Integer, MenuCommand> numToCommand;
@@ -33,9 +35,9 @@ public class Menu {
 	private Menu() {
 		numToCommand = new LinkedHashMap<>();
 		numToCommand.put(1, new ShowCatalogCommand("Show the entire EcoBike catalog"));
-		numToCommand.put(2, new AddBikeCommand("Add a new folding bike", BikeType.FOLDING_BIKE));
-		numToCommand.put(3, new AddBikeCommand("Add a new speedelec", BikeType.SPEEDELEC));
-		numToCommand.put(4, new AddBikeCommand("Add a new e-bike", BikeType.EBIKE));
+		numToCommand.put(2, new AddItemCommand("Add a new folding bike", BikeType.FOLDING_BIKE));
+		numToCommand.put(3, new AddItemCommand("Add a new speedelec", BikeType.SPEEDELEC));
+		numToCommand.put(4, new AddItemCommand("Add a new e-bike", BikeType.EBIKE));
 		numToCommand.put(5, new FindItemCommand("Find the first item of a particular brand"));
 		numToCommand.put(6, new WriteToFileCommand("Write to file"));
 		numToCommand.put(7, new StopProgramCommand("Stop the program"));
@@ -49,10 +51,11 @@ public class Menu {
 	}
 
 	private void displayMenu() {
-		out.println(SEPARATOR);
-		out.println("Please make your choice:");
-		numToCommand.forEach((k, c) -> out.println(k + " - " + c.getDescription()));
-		out.println(SEPARATOR);
+		StringBuilder sb = new StringBuilder();
+		sb.append(SEPARATOR).append("Please make your choice:\n");
+		numToCommand.forEach((k, c) -> sb.append(k).append(" - ").append(c.getDescription()).append("\n"));
+		sb.append(SEPARATOR);
+		out.println(sb.toString());
 	}
 
 	public Executable getCommandFromUser() {
@@ -131,5 +134,13 @@ public class Menu {
 		Arrays.stream(bikeTypes).forEach(t -> out.println((t.ordinal() + 1) + " - " + t.toString()));
 		int i = getIntInRange("Enter a number:", 1, BikeType.values().length, false);
 		return bikeTypes[i - 1];
+	}
+
+	public void displaySearchResult(Optional<AbstractBike> result) {
+		String s = "= = = = = SEARCH RESULT = = = = =\n" +
+				result.map(bike -> ("ITEM IS FOUND!\n" + bike.toDisplayFormatString()) + "\n")
+						.orElse("Item is not found :(\n") +
+				"= = = = = = = = = = = = = = = = =";
+		out.println(s);
 	}
 }

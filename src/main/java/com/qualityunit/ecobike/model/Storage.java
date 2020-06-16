@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Storage {
 	private static Storage storageInstance;
-	private List<AbstractBike> catalog;
+	private final List<AbstractBike> catalog;
 	private boolean isUpdated = false;
 
 	private Storage() {
@@ -24,7 +24,7 @@ public class Storage {
 		return catalog;
 	}
 
-	public void addBike(AbstractBike bike) {
+	public synchronized void addBike(AbstractBike bike) {
 		catalog.add(bike);
 		isUpdated = true;
 	}

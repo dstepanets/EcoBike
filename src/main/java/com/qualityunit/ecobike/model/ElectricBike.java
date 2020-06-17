@@ -57,10 +57,12 @@ public class ElectricBike extends AbstractBike {
 
 	@Override
 	public String toString() {
-		return "ElectricBike{" +
-				"maxSpeed=" + maxSpeed +
-				", batteryCapacity=" + batteryCapacity +
-				"} " + super.toString();
+		return super.toString() + maxSpeed + "; "
+								+ getWeight() + "; "
+								+ getHasLights() + "; "
+								+ batteryCapacity + "; "
+								+ getColor() + "; "
+								+ getPrice() + "\n";
 	}
 
 	@Override

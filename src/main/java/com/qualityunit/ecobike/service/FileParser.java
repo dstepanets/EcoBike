@@ -7,14 +7,15 @@ import com.qualityunit.ecobike.model.FoldingBike;
 import com.qualityunit.ecobike.model.Storage;
 
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import static com.qualityunit.ecobike.model.BikeType.*;
-import static java.lang.System.*;
+import static com.qualityunit.ecobike.model.BikeType.EBIKE;
+import static com.qualityunit.ecobike.model.BikeType.FOLDING_BIKE;
+import static com.qualityunit.ecobike.model.BikeType.SPEEDELEC;
+import static java.lang.System.err;
+import static java.lang.System.out;
 
 public class FileParser {
 	private static final String ERROR_LINE_MSG = "Error during input file parsing. Line #%d was ignored:\n'%s'";
@@ -54,7 +55,7 @@ public class FileParser {
 		});
 	}
 
-//	TODO Implement validation and exception mechanism
+	//	TODO Implement validation and exception mechanism
 	private AbstractBike buildBikeFromLine(String bikeTypeId, String brandName, String[] arr) {
 		AbstractBike bike = null;
 		try {

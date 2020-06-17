@@ -16,18 +16,20 @@ import static java.lang.System.err;
 
 public class AppController {
 	private final FileParser fileParser = new FileParser();
-	private Path inputFilePath;
+	private static Path inputFilePath;
+	private static final String FILE_PATH_PROMPT = "Please enter the input file path:";
+	private static final String OPEN_ERROR_MSG = "Can't open a file at this path: '%s'";
 
 	public void processInputFile(String[] args) {
-		String pathStr = (args.length > 0) ? args[0] : UserInput.getLine(Menu.FILE_PATH_PROMPT);
+		String pathStr = (args.length > 0) ? args[0] : UserInput.getLine(FILE_PATH_PROMPT);
 		Stream<String> stream = null;
 		do {
 			try {
 				inputFilePath = Paths.get(pathStr).toRealPath();
 				stream = Files.lines(inputFilePath);
 			} catch (InvalidPathException | IOException | SecurityException e) {
-				err.println(format(Menu.OPEN_ERROR_MSG, pathStr));
-				pathStr = UserInput.getLine(Menu.FILE_PATH_PROMPT);
+				err.println(format(OPEN_ERROR_MSG, pathStr));
+				pathStr = UserInput.getLine(FILE_PATH_PROMPT);
 			}
 		} while (stream == null);
 
@@ -40,5 +42,9 @@ public class AppController {
 		while (true) {
 			menu.getCommandFromUser().execute();
 		}
+	}
+
+	public static Path getInputFilePath() {
+		return inputFilePath;
 	}
 }

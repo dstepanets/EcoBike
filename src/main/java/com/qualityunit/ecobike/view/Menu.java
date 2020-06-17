@@ -25,13 +25,12 @@ import static com.qualityunit.ecobike.view.UserInput.getLineAllowEmpty;
 import static java.lang.System.out;
 
 public class Menu {
-	public static final String FILE_PATH_PROMPT = "Please enter the input file path:";
-	public static final String OPEN_ERROR_MSG = "Can't open a file at this path: '%s'";
-	public static final String SEPARATOR = "- - - - - - - - - - - - - - - - - - - - - - -\n";
+	private static final String SEPARATOR = "- - - - - - - - - - - - - - - - - - - - - - -";
 	private static final String ENTER_A_NUMBER = "Enter a number:";
 
 	private static Menu menuInstance;
 	private final Map<Integer, MenuCommand> numToCommand;
+	private final String menuText;
 
 	private Menu() {
 		numToCommand = new LinkedHashMap<>();
@@ -42,6 +41,16 @@ public class Menu {
 		numToCommand.put(5, new FindItemCommand("Find the first item of a particular brand"));
 		numToCommand.put(6, new WriteToFileCommand("Write to file"));
 		numToCommand.put(7, new StopProgramCommand("Stop the program"));
+
+		menuText = buildMenuText();
+	}
+
+	private String buildMenuText() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(SEPARATOR).append("\n").append("Please make your choice:\n");
+		numToCommand.forEach((k, c) -> sb.append(k).append(" - ").append(c.getDescription()).append("\n"));
+		sb.append(SEPARATOR);
+		return sb.toString();
 	}
 
 	public static synchronized Menu getInstance() {
@@ -51,16 +60,8 @@ public class Menu {
 		return menuInstance;
 	}
 
-	private void displayMenu() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(SEPARATOR).append("Please make your choice:\n");
-		numToCommand.forEach((k, c) -> sb.append(k).append(" - ").append(c.getDescription()).append('\n'));
-		sb.append(SEPARATOR);
-		out.println(sb.toString());
-	}
-
 	public Executable getCommandFromUser() {
-		displayMenu();
+		out.println(menuText);
 		int choice = getIntInRange(ENTER_A_NUMBER, 1, numToCommand.size(), false);
 		MenuCommand command = numToCommand.get(choice);
 		out.println("--> " + command.getDescription());
@@ -68,19 +69,19 @@ public class Menu {
 	}
 
 	public String displayCatalogPage(CatalogPage page) {
-		String pageStats = String.format("---[Page: %d/%d | Items: %d-%d/%d]---",
+		String pageStats = String.format("---[Page: %d/%d | Items: %d-%d/%d]---%n",
 				page.getCurrentPage(), page.getTotalPages(),
 				page.getFirstItemNum(), page.getLastItemNum(),
 				page.getTotalItems());
 
 		StringBuilder sb = new StringBuilder();
 		sb.append("\n").append(pageStats);
-		page.getItems().forEach(i -> sb.append(i.toDisplayFormatString()).append('\n'));
+		page.getItems().forEach(i -> sb.append(i.toDisplayFormatString()).append("\n"));
 		sb.append(pageStats);
 		out.println(sb.toString());
 
 		String prompt =
-				"\n('N' - next page | 'P' - previous page | 'M' - back to menu | <number> - go to this page)\n" +
+				"('N' - next page | 'P' - previous page | 'M' - back to menu | <number> - go to this page)\n" +
 						"Your command: ";
 		return getLine(prompt);
 	}
@@ -137,7 +138,7 @@ public class Menu {
 		BikeType[] bikeTypes = BikeType.values();
 		StringBuilder sb = new StringBuilder();
 		sb.append("Choose the bike type:\n");
-		Arrays.stream(bikeTypes).forEach(t -> sb.append(t.ordinal() + 1).append(" - ").append(t.toString()).append('\n'));
+		Arrays.stream(bikeTypes).forEach(t -> sb.append(t.ordinal() + 1).append(" - ").append(t.toString()).append("\n"));
 		out.println(sb.toString());
 		int i = getIntInRange(ENTER_A_NUMBER, 1, BikeType.values().length, false);
 		return bikeTypes[i - 1];
@@ -145,9 +146,17 @@ public class Menu {
 
 	public void displaySearchResult(Optional<AbstractBike> result) {
 		String s = "= = = = = SEARCH RESULT = = = = =\n" +
-				result.map(bike -> ("ITEM IS FOUND!\n" + bike.toDisplayFormatString()) + '\n')
+				result.map(bike -> ("ITEM IS FOUND!\n" + bike.toDisplayFormatString()) + "\n")
 						.orElse("Item is not found :(\n") +
 				"= = = = = = = = = = = = = = = = =";
 		out.println(s);
+	}
+
+	public int writeToFileOptions() {
+		String s = "1 - Create new file\n" +
+				"2 - Overwrite input file\n" +
+				"3 - Cancel";
+		out.println(s);
+		return UserInput.getIntInRange(ENTER_A_NUMBER, 1, 3, false);
 	}
 }

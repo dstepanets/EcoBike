@@ -32,4 +32,8 @@ public class Storage {
 	public boolean isUpdated() {
 		return isUpdated;
 	}
+
+	public void setUpdated(boolean updated) {
+		isUpdated = updated;
+	}
 }

@@ -57,10 +57,12 @@ public class FoldingBike extends AbstractBike {
 
 	@Override
 	public String toString() {
-		return "FoldingBike{" +
-				"wheelSize=" + wheelSize +
-				", gearsNum=" + gearsNum +
-				"} " + super.toString();
+		return super.toString() + wheelSize + "; "
+								+ gearsNum + "; "
+								+ getWeight() + "; "
+								+ getHasLights() + "; "
+								+ getColor() + "; "
+								+ getPrice() + "\n";
 	}
 
 	@Override

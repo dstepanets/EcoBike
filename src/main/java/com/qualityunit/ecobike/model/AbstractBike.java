@@ -119,13 +119,7 @@ public abstract class AbstractBike implements Comparable<AbstractBike> {
 
 	@Override
 	public String toString() {
-		return "{bikeType=" + bikeType +
-				", brand='" + brand + '\'' +
-				", weight=" + weight +
-				", hasLights=" + hasLights +
-				", color='" + color + '\'' +
-				", price=" + price +
-				'}';
+		return bikeType.toString() + " " + brand + "; ";
 	}
 
 	public String toDisplayFormatString() {

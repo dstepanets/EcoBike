@@ -20,6 +20,8 @@ public class FindItemCommand extends MenuCommand {
 		BikeType bikeType = Menu.getInstance().chooseBikeType();
 		AbstractBike query = Menu.getInstance().constructBikeFromUserInput(bikeType, true);
 
+		out.println("Search may take time. Meanwhile, you can continue using the app.");
+
 		Thread searchThread = new Thread(() -> {
 			long startTime = System.nanoTime();
 			Optional<AbstractBike> result = findItem(query);

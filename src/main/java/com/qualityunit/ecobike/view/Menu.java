@@ -28,6 +28,7 @@ public class Menu {
 	public static final String FILE_PATH_PROMPT = "Please enter the input file path:";
 	public static final String OPEN_ERROR_MSG = "Can't open a file at this path: '%s'";
 	public static final String SEPARATOR = "- - - - - - - - - - - - - - - - - - - - - - -\n";
+	private static final String ENTER_A_NUMBER = "Enter a number:";
 
 	private static Menu menuInstance;
 	private final Map<Integer, MenuCommand> numToCommand;
@@ -53,14 +54,14 @@ public class Menu {
 	private void displayMenu() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(SEPARATOR).append("Please make your choice:\n");
-		numToCommand.forEach((k, c) -> sb.append(k).append(" - ").append(c.getDescription()).append("\n"));
+		numToCommand.forEach((k, c) -> sb.append(k).append(" - ").append(c.getDescription()).append('\n'));
 		sb.append(SEPARATOR);
 		out.println(sb.toString());
 	}
 
 	public Executable getCommandFromUser() {
 		displayMenu();
-		int choice = getIntInRange("Enter a number:", 1, numToCommand.size(), false);
+		int choice = getIntInRange(ENTER_A_NUMBER, 1, numToCommand.size(), false);
 		MenuCommand command = numToCommand.get(choice);
 		out.println("--> " + command.getDescription());
 		return command;
@@ -71,9 +72,13 @@ public class Menu {
 				page.getCurrentPage(), page.getTotalPages(),
 				page.getFirstItemNum(), page.getLastItemNum(),
 				page.getTotalItems());
-		out.println("\n" + pageStats);
-		page.getItems().forEach(i -> out.println(i.toDisplayFormatString()));
-		out.println(pageStats);
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("\n").append(pageStats);
+		page.getItems().forEach(i -> sb.append(i.toDisplayFormatString()).append('\n'));
+		sb.append(pageStats);
+		out.println(sb.toString());
+
 		String prompt =
 				"\n('N' - next page | 'P' - previous page | 'M' - back to menu | <number> - go to this page)\n" +
 						"Your command: ";
@@ -130,15 +135,17 @@ public class Menu {
 
 	public BikeType chooseBikeType() {
 		BikeType[] bikeTypes = BikeType.values();
-		out.println("Choose the bike type:");
-		Arrays.stream(bikeTypes).forEach(t -> out.println((t.ordinal() + 1) + " - " + t.toString()));
-		int i = getIntInRange("Enter a number:", 1, BikeType.values().length, false);
+		StringBuilder sb = new StringBuilder();
+		sb.append("Choose the bike type:\n");
+		Arrays.stream(bikeTypes).forEach(t -> sb.append(t.ordinal() + 1).append(" - ").append(t.toString()).append('\n'));
+		out.println(sb.toString());
+		int i = getIntInRange(ENTER_A_NUMBER, 1, BikeType.values().length, false);
 		return bikeTypes[i - 1];
 	}
 
 	public void displaySearchResult(Optional<AbstractBike> result) {
 		String s = "= = = = = SEARCH RESULT = = = = =\n" +
-				result.map(bike -> ("ITEM IS FOUND!\n" + bike.toDisplayFormatString()) + "\n")
+				result.map(bike -> ("ITEM IS FOUND!\n" + bike.toDisplayFormatString()) + '\n')
 						.orElse("Item is not found :(\n") +
 				"= = = = = = = = = = = = = = = = =";
 		out.println(s);

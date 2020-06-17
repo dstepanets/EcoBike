@@ -1,6 +1,9 @@
 package com.qualityunit.ecobike.controller.command;
 
+import com.qualityunit.ecobike.model.Storage;
 import com.qualityunit.ecobike.view.UserInput;
+
+import static java.lang.System.*;
 
 public class StopProgramCommand extends MenuCommand {
 	public StopProgramCommand(String description) {
@@ -9,7 +12,14 @@ public class StopProgramCommand extends MenuCommand {
 
 	@Override
 	public void execute() {
+		if (Storage.getInstance().isUpdated()) {
+			out.println("WARNING!\nThere are unsaved changes. You may want to write them to file first.");
+			boolean answer = UserInput.getBoolean("Quit without saving?", false);
+			if (!answer) {
+				return;
+			}
+		}
 		UserInput.closeScanner();
-		System.exit(0);
+		exit(0);
 	}
 }

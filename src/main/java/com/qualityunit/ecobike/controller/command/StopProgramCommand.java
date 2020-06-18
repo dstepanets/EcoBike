@@ -1,13 +1,14 @@
 package com.qualityunit.ecobike.controller.command;
 
 import com.qualityunit.ecobike.model.Storage;
+import com.qualityunit.ecobike.view.Menu;
 import com.qualityunit.ecobike.view.UserInput;
 
 import static java.lang.System.*;
 
 public class StopProgramCommand extends MenuCommand {
-	public StopProgramCommand(String description) {
-		super(description);
+	public StopProgramCommand(String description, Menu menu) {
+		super(description, menu);
 	}
 
 	@Override

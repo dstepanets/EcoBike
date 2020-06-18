@@ -1,6 +1,5 @@
 package com.qualityunit.ecobike.controller.command;
 
-import com.qualityunit.ecobike.controller.AppController;
 import com.qualityunit.ecobike.model.AbstractBike;
 import com.qualityunit.ecobike.model.Storage;
 import com.qualityunit.ecobike.view.Menu;
@@ -10,6 +9,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 import static java.lang.System.err;
@@ -17,13 +17,15 @@ import static java.lang.System.out;
 
 public class WriteToFileCommand extends MenuCommand {
 	private static final String PATH_PROMPT =
-					"Enter the path to save the catalog file to:\n" +
+			"Enter the path to save the catalog file to:\n" +
 					"(Can be absolute or relative to the app root (where pom.xml is located).\n" +
 					"Should include the file name and extension)";
 	private boolean isSaved = false;
+	private final Path inputFilePath;
 
-	public WriteToFileCommand(String description) {
-		super(description);
+	public WriteToFileCommand(String description, Path inputFilePath, Menu menu) {
+		super(description, menu);
+		this.inputFilePath = inputFilePath;
 	}
 
 	@Override
@@ -35,14 +37,14 @@ public class WriteToFileCommand extends MenuCommand {
 
 		isSaved = false;
 		while (!isSaved) {
-			int option = Menu.getInstance().writeToFileOptions();
+			int option = getMenu().writeToFileOptions();
 			String pathStr = null;
 			switch (option) {
 				case 1:
 					pathStr = UserInput.getLine(PATH_PROMPT);
 					break;
 				case 2:
-					pathStr = AppController.getInputFilePath().toString();
+					pathStr = inputFilePath.toString();
 					break;
 				case 3:
 					return;

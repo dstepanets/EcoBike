@@ -13,6 +13,7 @@ import com.qualityunit.ecobike.model.CatalogPage;
 import com.qualityunit.ecobike.model.ElectricBike;
 import com.qualityunit.ecobike.model.FoldingBike;
 
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -28,19 +29,18 @@ public class Menu {
 	private static final String SEPARATOR = "- - - - - - - - - - - - - - - - - - - - - - -";
 	private static final String ENTER_A_NUMBER = "Enter a number:";
 
-	private static Menu menuInstance;
 	private final Map<Integer, MenuCommand> numToCommand;
 	private final String menuText;
 
-	private Menu() {
+	public Menu(Path inputFilePath) {
 		numToCommand = new LinkedHashMap<>();
-		numToCommand.put(1, new ShowCatalogCommand("Show the entire EcoBike catalog"));
-		numToCommand.put(2, new AddItemCommand("Add a new folding bike", BikeType.FOLDING_BIKE));
-		numToCommand.put(3, new AddItemCommand("Add a new speedelec", BikeType.SPEEDELEC));
-		numToCommand.put(4, new AddItemCommand("Add a new e-bike", BikeType.EBIKE));
-		numToCommand.put(5, new FindItemCommand("Find the first item of a particular brand"));
-		numToCommand.put(6, new WriteToFileCommand("Write to file"));
-		numToCommand.put(7, new StopProgramCommand("Stop the program"));
+		numToCommand.put(1, new ShowCatalogCommand("Show the entire EcoBike catalog", this));
+		numToCommand.put(2, new AddItemCommand("Add a new folding bike", BikeType.FOLDING_BIKE, this));
+		numToCommand.put(3, new AddItemCommand("Add a new speedelec", BikeType.SPEEDELEC, this));
+		numToCommand.put(4, new AddItemCommand("Add a new e-bike", BikeType.EBIKE, this));
+		numToCommand.put(5, new FindItemCommand("Find the first item of a particular brand", this));
+		numToCommand.put(6, new WriteToFileCommand("Write to file", inputFilePath, this));
+		numToCommand.put(7, new StopProgramCommand("Stop the program", this));
 
 		menuText = buildMenuText();
 	}
@@ -51,13 +51,6 @@ public class Menu {
 		numToCommand.forEach((k, c) -> sb.append(k).append(" - ").append(c.getDescription()).append("\n"));
 		sb.append(SEPARATOR);
 		return sb.toString();
-	}
-
-	public static synchronized Menu getInstance() {
-		if (menuInstance == null) {
-			menuInstance = new Menu();
-		}
-		return menuInstance;
 	}
 
 	public Executable getCommandFromUser() {

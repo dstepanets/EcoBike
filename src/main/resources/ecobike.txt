@@ -998,3 +998,4 @@ FOLDING BIKE Stern; 20; 27; 16500; false; white; 439
 SPEEDELEC Dualtron; 60; 20500; false; 15600; golden; 869
 SPEEDELEC Ultron; 60; 7000; false; 11400; lemon; 1055
 E-BIKE Ferrari; 60; 28900; false; 21000; brown; 825
+FOLDING BIKE asd; 55; 5; 2; true; 5; 5

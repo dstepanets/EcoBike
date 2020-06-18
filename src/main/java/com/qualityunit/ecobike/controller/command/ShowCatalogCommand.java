@@ -16,8 +16,8 @@ public class ShowCatalogCommand extends MenuCommand {
 	private int totalPages;
 	private CatalogPage page;
 
-	public ShowCatalogCommand(String description) {
-		super(description);
+	public ShowCatalogCommand(String description, Menu menu) {
+		super(description, menu);
 		catalog = Storage.getInstance().getCatalog();
 	}
 
@@ -55,7 +55,7 @@ public class ShowCatalogCommand extends MenuCommand {
 	private void sendPageToViewAndProcessControls(CatalogPage page) {
 		Integer pageNum = null;
 		while (pageNum == null) {
-			String command = Menu.getInstance().displayCatalogPage(page);
+			String command = getMenu().displayCatalogPage(page);
 			switch (command.toLowerCase().charAt(0)) {
 				case 'n':
 					pageNum = page.getCurrentPage() + 1;

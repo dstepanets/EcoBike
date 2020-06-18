@@ -11,27 +11,25 @@ import java.util.Optional;
 import static java.lang.System.out;
 
 public class FindItemCommand extends MenuCommand {
-	public FindItemCommand(String description) {
-		super(description);
+	public FindItemCommand(String description, Menu menu) {
+		super(description, menu);
 	}
 
 	@Override
 	public void execute() {
-		BikeType bikeType = Menu.getInstance().chooseBikeType();
-		AbstractBike query = Menu.getInstance().constructBikeFromUserInput(bikeType, true);
+		BikeType bikeType = getMenu().chooseBikeType();
+		AbstractBike query = getMenu().constructBikeFromUserInput(bikeType, true);
 
 		out.println("Search may take time. Meanwhile, you can continue using the app.");
-
 		Thread searchThread = new Thread(() -> {
 			long startTime = System.nanoTime();
 			Optional<AbstractBike> result = findItem(query);
 			long endTime = System.nanoTime();
 			out.println("Search time: " + (endTime - startTime));
 
-			Menu.getInstance().displaySearchResult(result);
+			getMenu().displaySearchResult(result);
 		});
 		searchThread.start();
-
 	}
 
 	private Optional<AbstractBike> findItem(AbstractBike query) {

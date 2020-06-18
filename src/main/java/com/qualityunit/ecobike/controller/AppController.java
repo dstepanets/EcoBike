@@ -16,7 +16,7 @@ import static java.lang.System.err;
 
 public class AppController {
 	private final FileParser fileParser = new FileParser();
-	private static Path inputFilePath;
+	private Path inputFilePath;
 	private static final String FILE_PATH_PROMPT = "Please enter the input file path:";
 	private static final String OPEN_ERROR_MSG = "Can't open a file at this path: '%s'";
 
@@ -38,13 +38,9 @@ public class AppController {
 	}
 
 	public void runMenu() {
-		Menu menu = Menu.getInstance();
+		Menu menu = new Menu(inputFilePath);
 		while (true) {
 			menu.getCommandFromUser().execute();
 		}
-	}
-
-	public static Path getInputFilePath() {
-		return inputFilePath;
 	}
 }

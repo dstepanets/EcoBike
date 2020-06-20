@@ -14,10 +14,14 @@ import static java.lang.String.format;
 import static java.lang.System.err;
 
 public class AppController {
-	private final UserInput userInput = new UserInput();
+	private final UserInput userInput;
 	private Path inputFilePath;
 	private static final String FILE_PATH_PROMPT = "Please enter the input file path:";
 	private static final String OPEN_ERROR_MSG = "Can't open a file at this path: '%s'";
+
+	public AppController(UserInput userInput) {
+		this.userInput = userInput;
+	}
 
 	public Stream<String> getStreamFromFilePath(String[] args) {
 		String pathStr = (args.length > 0) ? args[0] : userInput.getLine(FILE_PATH_PROMPT);

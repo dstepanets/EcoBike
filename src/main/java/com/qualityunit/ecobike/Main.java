@@ -4,6 +4,7 @@ import com.qualityunit.ecobike.controller.AppController;
 import com.qualityunit.ecobike.model.AbstractBike;
 import com.qualityunit.ecobike.model.Storage;
 import com.qualityunit.ecobike.service.FileParser;
+import com.qualityunit.ecobike.view.UserInput;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -11,7 +12,7 @@ import java.util.stream.Stream;
 public class Main {
 
 	public static void main(String[] args) {
-		AppController appController = new AppController();
+		AppController appController = new AppController(new UserInput());
 		Stream<String> stream = appController.getStreamFromFilePath(args);
 
 		List<AbstractBike> bikesCatalog = Storage.getInstance().getCatalog();

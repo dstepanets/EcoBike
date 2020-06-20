@@ -27,10 +27,10 @@ public class FileParser {
 	private String currentLine;
 	private long lineCount;
 
-	public void parseLinesStream(Stream<String> stream) {
+	public void parseLinesStreamToStorage(Stream<String> stream, List<AbstractBike> catalog) {
 		lineCount = 0;
 		final Pattern pattern = Pattern.compile(TYPE_BRAND_REGEX);
-		final List<AbstractBike> bikesCatalog = Storage.getInstance().getCatalog();
+
 		stream.forEach(ln -> {
 			lineCount++;
 			currentLine = ln;
@@ -46,7 +46,7 @@ public class FileParser {
 				out.println("--> [" + brandName + "]");
 				AbstractBike bike = buildBikeFromLine(bikeType, brandName, arr);
 				if (bike != null) {
-					bikesCatalog.add(bike);
+					catalog.add(bike);
 				}
 			} else {
 				err.println(String.format(ERROR_LINE_MSG, lineCount, currentLine));

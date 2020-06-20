@@ -19,20 +19,18 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.qualityunit.ecobike.view.UserInput.getBoolean;
-import static com.qualityunit.ecobike.view.UserInput.getIntInRange;
-import static com.qualityunit.ecobike.view.UserInput.getLine;
-import static com.qualityunit.ecobike.view.UserInput.getLineAllowEmpty;
 import static java.lang.System.out;
 
 public class Menu {
 	private static final String SEPARATOR = "- - - - - - - - - - - - - - - - - - - - - - -";
 	private static final String ENTER_A_NUMBER = "Enter a number:";
 
+	private final UserInput userInput;
 	private final Map<Integer, MenuCommand> numToCommand;
 	private final String menuText;
 
-	public Menu(Path inputFilePath) {
+	public Menu(Path inputFilePath, UserInput userInput) {
+		this.userInput = userInput;
 		numToCommand = new LinkedHashMap<>();
 		numToCommand.put(1, new ShowCatalogCommand("Show the entire EcoBike catalog", this));
 		numToCommand.put(2, new AddItemCommand("Add a new folding bike", BikeType.FOLDING_BIKE, this));
@@ -45,6 +43,10 @@ public class Menu {
 		menuText = buildMenuText();
 	}
 
+	public UserInput getUserInput() {
+		return userInput;
+	}
+
 	private String buildMenuText() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(SEPARATOR).append("\n").append("Please make your choice:\n");
@@ -55,7 +57,7 @@ public class Menu {
 
 	public Executable getCommandFromUser() {
 		out.println(menuText);
-		int choice = getIntInRange(ENTER_A_NUMBER, 1, numToCommand.size(), false);
+		int choice = userInput.getIntInRange(ENTER_A_NUMBER, 1, numToCommand.size(), false);
 		MenuCommand command = numToCommand.get(choice);
 		out.println("--> " + command.getDescription());
 		return command;
@@ -76,7 +78,7 @@ public class Menu {
 		String prompt =
 				"('N' - next page | 'P' - previous page | 'M' - back to menu | <number> - go to this page)\n" +
 						"Your command: ";
-		return getLine(prompt);
+		return userInput.getLine(prompt);
 	}
 
 	public AbstractBike constructBikeFromUserInput(BikeType bikeType, boolean isSearchQuery) {
@@ -86,11 +88,13 @@ public class Menu {
 			out.println("NEW " + bikeType.toString());
 		}
 
-		String brandName = getLine("Enter its brand name:");
-		int weight = getIntInRange("Enter the weight of the bike (in grams):", 0, Integer.MAX_VALUE, isSearchQuery);
-		Boolean hasLights = getBoolean("Does it have front and back lights?", isSearchQuery);
-		String color = isSearchQuery ? getLineAllowEmpty("Enter the color:") : getLine("Enter the color:");
-		int price = getIntInRange("Enter the price:", 0, Integer.MAX_VALUE, isSearchQuery);
+		String brandName = userInput.getLine("Enter its brand name:");
+		int weight = userInput.getIntInRange("Enter the weight of the bike (in grams):",
+				0, Integer.MAX_VALUE, isSearchQuery);
+		Boolean hasLights = userInput.getBoolean("Does it have front and back lights?", isSearchQuery);
+		String color = isSearchQuery ? userInput.getLineAllowEmpty("Enter the color:") :
+				userInput.getLine("Enter the color:");
+		int price = userInput.getIntInRange("Enter the price:", 0, Integer.MAX_VALUE, isSearchQuery);
 
 		AbstractBike bike = null;
 		switch (bikeType) {
@@ -102,9 +106,9 @@ public class Menu {
 						.withHasLights(hasLights)
 						.withColor(color)
 						.withPrice(price)
-						.withWheelSize(getIntInRange("Enter the size of the wheels (in inches):",
+						.withWheelSize(userInput.getIntInRange("Enter the size of the wheels (in inches):",
 								0, Integer.MAX_VALUE, isSearchQuery))
-						.withGearsNum(getIntInRange("Enter the number of gears:",
+						.withGearsNum(userInput.getIntInRange("Enter the number of gears:",
 								0, Integer.MAX_VALUE, isSearchQuery))
 						.build();
 				break;
@@ -117,9 +121,9 @@ public class Menu {
 						.withHasLights(hasLights)
 						.withColor(color)
 						.withPrice(price)
-						.withMaxSpeed(getIntInRange("Enter the maximum speed (in km/h):",
+						.withMaxSpeed(userInput.getIntInRange("Enter the maximum speed (in km/h):",
 								0, Integer.MAX_VALUE, isSearchQuery))
-						.withBatteryCapacity(getIntInRange("Enter the battery capacity (in mAh):",
+						.withBatteryCapacity(userInput.getIntInRange("Enter the battery capacity (in mAh):",
 								0, Integer.MAX_VALUE, isSearchQuery))
 						.build();
 				break;
@@ -133,7 +137,7 @@ public class Menu {
 		sb.append("Choose the bike type:\n");
 		Arrays.stream(bikeTypes).forEach(t -> sb.append(t.ordinal() + 1).append(" - ").append(t.toString()).append("\n"));
 		out.println(sb.toString());
-		int i = getIntInRange(ENTER_A_NUMBER, 1, BikeType.values().length, false);
+		int i = userInput.getIntInRange(ENTER_A_NUMBER, 1, BikeType.values().length, false);
 		return bikeTypes[i - 1];
 	}
 
@@ -150,6 +154,6 @@ public class Menu {
 				"2 - Overwrite input file\n" +
 				"3 - Cancel";
 		out.println(s);
-		return UserInput.getIntInRange(ENTER_A_NUMBER, 1, 3, false);
+		return userInput.getIntInRange(ENTER_A_NUMBER, 1, 3, false);
 	}
 }

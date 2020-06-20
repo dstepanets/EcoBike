@@ -7,34 +7,32 @@ import static java.lang.System.in;
 import static java.lang.System.out;
 
 public class UserInput {
-	private static final Scanner SCAN = new Scanner(in);
+	private final Scanner scanner = new Scanner(in);
 	private static final String INVALID_INPUT = "Invalid input";
 
-	private UserInput() {}
-
-	public static void closeScanner() {
-		SCAN.close();
+	public void closeScanner() {
+		scanner.close();
 	}
 
-	public static String getLine(String prompt) {
+	public String getLine(String prompt) {
 		String ln;
 		do {
 			if (prompt != null) {
 				out.println(prompt);
 			}
-			ln = SCAN.nextLine().trim();
+			ln = scanner.nextLine().trim();
 		} while (ln.length() < 1);
 		return ln;
 	}
 
-	public static String getLineAllowEmpty(String prompt) {
+	public String getLineAllowEmpty(String prompt) {
 		if (prompt != null) {
 			out.println(prompt + " (or leave blank)");
 		}
-		return SCAN.nextLine().trim();
+		return scanner.nextLine().trim();
 	}
 
-	public static int getInt(String prompt, boolean isOptional) {
+	public int getInt(String prompt, boolean isOptional) {
 		Integer num = null;
 		do {
 			try {
@@ -50,7 +48,7 @@ public class UserInput {
 		return num;
 	}
 
-	public static int getIntInRange(String prompt, int min, int max, boolean isOptional) {
+	public int getIntInRange(String prompt, int min, int max, boolean isOptional) {
 		int num;
 		do {
 			num = getInt(prompt, isOptional);
@@ -64,7 +62,7 @@ public class UserInput {
 		return num;
 	}
 
-	public static Boolean getBoolean(String prompt, boolean isOptional) {
+	public Boolean getBoolean(String prompt, boolean isOptional) {
 		do {
 			String ln = isOptional ? getLineAllowEmpty(prompt + " (y/n):") : getLine(prompt + " (y/n):");
 			if (isOptional && ln.isEmpty()) {

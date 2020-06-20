@@ -62,7 +62,7 @@ public class ElectricBike extends AbstractBike {
 								+ getHasLights() + "; "
 								+ batteryCapacity + "; "
 								+ getColor() + "; "
-								+ getPrice() + "\n";
+								+ getPrice();
 	}
 
 	@Override

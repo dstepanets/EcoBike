@@ -13,14 +13,15 @@ public class StopProgramCommand extends MenuCommand {
 
 	@Override
 	public void execute() {
+		final UserInput userInput = getMenu().getUserInput();
 		if (Storage.getInstance().isUpdated()) {
 			out.println("WARNING!\nThere are unsaved changes. You may want to write them to file first.");
-			boolean answer = UserInput.getBoolean("Quit without saving?", false);
+			boolean answer = userInput.getBoolean("Quit without saving?", false);
 			if (!answer) {
 				return;
 			}
 		}
-		UserInput.closeScanner();
+		userInput.closeScanner();
 		exit(0);
 	}
 }

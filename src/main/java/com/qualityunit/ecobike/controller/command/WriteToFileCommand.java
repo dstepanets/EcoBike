@@ -17,15 +17,17 @@ import static java.lang.System.out;
 
 public class WriteToFileCommand extends MenuCommand {
 	private static final String PATH_PROMPT =
-			"Enter the path to save the catalog file to:\n" +
+					"Enter the path to save the catalog file to:\n" +
 					"(Can be absolute or relative to the app root (where pom.xml is located).\n" +
 					"Should include the file name and extension)";
 	private boolean isSaved = false;
 	private final Path inputFilePath;
+	private final UserInput userInput;
 
 	public WriteToFileCommand(String description, Path inputFilePath, Menu menu) {
 		super(description, menu);
 		this.inputFilePath = inputFilePath;
+		userInput = getMenu().getUserInput();
 	}
 
 	@Override
@@ -41,7 +43,7 @@ public class WriteToFileCommand extends MenuCommand {
 			String pathStr = null;
 			switch (option) {
 				case 1:
-					pathStr = UserInput.getLine(PATH_PROMPT);
+					pathStr = userInput.getLine(PATH_PROMPT);
 					break;
 				case 2:
 					pathStr = inputFilePath.toString();
@@ -60,14 +62,15 @@ public class WriteToFileCommand extends MenuCommand {
 		out.println("--> Writing to: " + file.getAbsolutePath());
 		if (file.isFile()) {
 			String prompt = String.format("Sure you want to overwrite the file '%s'?", file.getAbsolutePath());
-			boolean confirmed = UserInput.getBoolean(prompt, false);
+			boolean confirmed = userInput.getBoolean(prompt, false);
 			if (!confirmed) return;
 		}
 
 		List<AbstractBike> catalog = Storage.getInstance().getCatalog();
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
 			for (AbstractBike b : catalog) {
-				bw.write(b.toString());
+				bw.append(b.toString());
+				bw.newLine();
 			}
 			isSaved = true;
 			out.println("Catalog was saved to file");

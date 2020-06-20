@@ -62,7 +62,7 @@ public class FoldingBike extends AbstractBike {
 								+ getWeight() + "; "
 								+ getHasLights() + "; "
 								+ getColor() + "; "
-								+ getPrice() + "\n";
+								+ getPrice();
 	}
 
 	@Override

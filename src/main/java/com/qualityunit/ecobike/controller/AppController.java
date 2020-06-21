@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
+import static java.lang.System.*;
 import static java.lang.System.err;
 
 public class AppController {
@@ -35,6 +36,7 @@ public class AppController {
 				pathStr = userInput.getLine(FILE_PATH_PROMPT);
 			}
 		} while (stream == null);
+		out.println("Reading the file: " + inputFilePath);
 		return stream;
 	}
 

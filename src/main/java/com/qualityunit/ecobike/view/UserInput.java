@@ -9,7 +9,8 @@ import static java.lang.System.out;
 public class UserInput {
 	private final Scanner scanner = new Scanner(in);
 	private static final String INVALID_INPUT = "Invalid input";
-
+	//		InputStream in = new ByteArrayInputStream(inputFile.getPath().getBytes());
+	//		System.setIn(in);
 	public void closeScanner() {
 		scanner.close();
 	}

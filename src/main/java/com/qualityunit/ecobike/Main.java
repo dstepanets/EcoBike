@@ -7,7 +7,10 @@ import com.qualityunit.ecobike.service.FileParser;
 import com.qualityunit.ecobike.view.UserInput;
 
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Stream;
+
+import static java.lang.System.in;
 
 public class Main {
 

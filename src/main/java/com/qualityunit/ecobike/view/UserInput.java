@@ -8,9 +8,8 @@ import static java.lang.System.out;
 
 public class UserInput {
 	private final Scanner scanner = new Scanner(in);
-	private static final String INVALID_INPUT = "Invalid input";
-	//		InputStream in = new ByteArrayInputStream(inputFile.getPath().getBytes());
-	//		System.setIn(in);
+	public static final String INVALID_INPUT = "Invalid input";
+
 	public void closeScanner() {
 		scanner.close();
 	}
@@ -18,7 +17,7 @@ public class UserInput {
 	public String getLine(String prompt) {
 		String ln;
 		do {
-			if (prompt != null) {
+			if (prompt != null && !prompt.trim().isEmpty()) {
 				out.println(prompt);
 			}
 			ln = scanner.nextLine().trim();
@@ -27,7 +26,7 @@ public class UserInput {
 	}
 
 	public String getLineAllowEmpty(String prompt) {
-		if (prompt != null) {
+		if (prompt != null && !prompt.trim().isEmpty()) {
 			out.println(prompt + " (or leave blank)");
 		}
 		return scanner.nextLine().trim();

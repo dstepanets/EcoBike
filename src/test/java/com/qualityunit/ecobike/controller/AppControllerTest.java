@@ -1,7 +1,6 @@
 package com.qualityunit.ecobike.controller;
 
 import com.qualityunit.ecobike.view.UserInput;
-import org.hamcrest.MatcherAssert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -12,11 +11,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.stream.Stream;
 
@@ -36,10 +33,8 @@ public class AppControllerTest {
 	private AppController controller;
 	private File inputFile;
 
-	private final ByteArrayInputStream testIn = new ByteArrayInputStream(new byte[]{});
 	private final ByteArrayOutputStream testOut = new ByteArrayOutputStream();
 	private final ByteArrayOutputStream testErr = new ByteArrayOutputStream();
-	private final InputStream backupIn = System.in;
 	private final PrintStream backupOut = System.out;
 	private final PrintStream backupErr = System.err;
 
@@ -49,11 +44,8 @@ public class AppControllerTest {
 	@Before
 	public void setUp() {
 		try {
-//			System.setIn(testIn);
 			System.setOut(new PrintStream(testOut));
 			System.setErr(new PrintStream(testErr));
-
-//			MockitoAnnotations.initMocks(this);
 			inputFile = folder.newFile("testInput.txt");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -62,7 +54,6 @@ public class AppControllerTest {
 
 	@After
 	public void tearDown() throws Exception {
-//		System.setIn(backupIn);
 		System.setOut(new PrintStream(backupOut));
 		System.setErr(new PrintStream(backupErr));
 	}

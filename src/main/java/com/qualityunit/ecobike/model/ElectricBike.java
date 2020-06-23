@@ -30,11 +30,17 @@ public class ElectricBike extends AbstractBike {
 		}
 
 		public ElectricBikeBuilder withMaxSpeed(int maxSpeed) {
+			if (maxSpeed < 0) {
+				throw new BikeBuildingException("Maximum speed can't be negative");
+			}
 			this.maxSpeed = maxSpeed;
 			return this;
 		}
 
 		public ElectricBikeBuilder withBatteryCapacity(int batteryCapacity) {
+			if (batteryCapacity < 0) {
+				throw new BikeBuildingException("Battery capacity speed can't be negative");
+			}
 			this.batteryCapacity = batteryCapacity;
 			return this;
 		}

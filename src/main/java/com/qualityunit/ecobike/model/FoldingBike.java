@@ -30,11 +30,17 @@ public class FoldingBike extends AbstractBike {
 		}
 
 		public FoldingBikeBuilder withWheelSize(int wheelSize) {
+			if (wheelSize < 0) {
+				throw new BikeBuildingException("Wheel size can't be negative");
+			}
 			this.wheelSize = wheelSize;
 			return this;
 		}
 
 		public FoldingBikeBuilder withGearsNum(int gearsNum) {
+			if (gearsNum < 0) {
+				throw new BikeBuildingException("Number of gears can't be negative");
+			}
 			this.gearsNum = gearsNum;
 			return this;
 		}

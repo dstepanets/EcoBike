@@ -30,16 +30,25 @@ public abstract class AbstractBike implements Comparable<AbstractBike> {
 		protected abstract T getThis();
 
 		public T withBikeType(BikeType bikeType) {
+			if (bikeType == null) {
+				throw new BikeBuildingException("Bike type is not set");
+			}
 			this.bikeType = bikeType;
 			return getThis();
 		}
 
 		public T withBrand(String brand) {
+			if (brand == null) {
+				throw new BikeBuildingException("No brand name");
+			}
 			this.brand = brand;
 			return getThis();
 		}
 
 		public T withWeight(int weight) {
+			if (weight < 0) {
+				throw new BikeBuildingException("Weight can't be negative");
+			}
 			this.weight = weight;
 			return getThis();
 		}
@@ -50,11 +59,17 @@ public abstract class AbstractBike implements Comparable<AbstractBike> {
 		}
 
 		public T withColor(String color) {
+			if (color == null) {
+				throw new BikeBuildingException("No color is set");
+			}
 			this.color = color;
 			return getThis();
 		}
 
 		public T withPrice(int price) {
+			if (price < 0) {
+				throw new BikeBuildingException("Price can't be negative");
+			}
 			this.price = price;
 			return getThis();
 		}

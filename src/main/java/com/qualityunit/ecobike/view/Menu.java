@@ -12,6 +12,7 @@ import com.qualityunit.ecobike.model.BikeType;
 import com.qualityunit.ecobike.model.CatalogPage;
 import com.qualityunit.ecobike.model.ElectricBike;
 import com.qualityunit.ecobike.model.FoldingBike;
+import com.qualityunit.ecobike.model.Storage;
 
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -36,7 +37,8 @@ public class Menu {
 		numToCommand.put(2, new AddItemCommand("Add a new folding bike", BikeType.FOLDING_BIKE, this));
 		numToCommand.put(3, new AddItemCommand("Add a new speedelec", BikeType.SPEEDELEC, this));
 		numToCommand.put(4, new AddItemCommand("Add a new e-bike", BikeType.EBIKE, this));
-		numToCommand.put(5, new FindItemCommand("Find the first item of a particular brand", this));
+		numToCommand.put(5, new FindItemCommand("Find the first item of a particular brand",
+														this, Storage.getInstance().getCatalog()));
 		numToCommand.put(6, new WriteToFileCommand("Write to file", inputFilePath, this));
 		numToCommand.put(7, new StopProgramCommand("Stop the program", this));
 

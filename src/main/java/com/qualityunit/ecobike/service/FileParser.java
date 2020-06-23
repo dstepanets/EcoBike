@@ -24,9 +24,9 @@ public class FileParser {
 	public static final String INVALID_TYPE_OR_BRAND = "Invalid bike type or brand name";
 	private static final String ERROR_MSG = "Error message: \"%s\"";
 	private static final String TYPE_BRAND_REGEX = "(" + FOLDING_BIKE.toString() + "|"
-			+ EBIKE.toString() + "|"
-			+ SPEEDELEC.toString() + ")"
-			+ " (.+$)";
+														+ EBIKE.toString() + "|"
+														+ SPEEDELEC.toString() + ")"
+														+ " (.+$)";
 	private String currentLine;
 	private long lineCount;
 
@@ -39,14 +39,10 @@ public class FileParser {
 			currentLine = ln;
 			String[] arr = ln.split("; ");
 
-			Stream.of(arr).forEach(out::println);
-
 			Matcher matcher = pattern.matcher(arr[0]);
 			if (matcher.find()) {
 				String bikeType = matcher.group(1);
 				String brandName = matcher.group(2);
-				out.println("--> [" + bikeType + "]");    //
-				out.println("--> [" + brandName + "]");
 				Optional<AbstractBike> bike = buildBikeFromLine(bikeType, brandName, arr);
 				bike.ifPresent(catalog::add);
 			} else {
@@ -57,7 +53,6 @@ public class FileParser {
 		return lineCount;
 	}
 
-	//	TODO Implement validation and exception mechanism
 	private Optional<AbstractBike> buildBikeFromLine(String bikeTypeId, String brandName, String[] arr) {
 		AbstractBike bike = null;
 		try {
@@ -94,11 +89,6 @@ public class FileParser {
 		} catch (BikeBuildingException | IllegalArgumentException | IndexOutOfBoundsException e) {
 			printParsingError(e.getMessage());
 		}
-
-		if (bike != null) {
-			out.println("====>NEW BIKE! " + bike.toString() + "\n");
-		}
-
 		return Optional.ofNullable(bike);
 	}
 

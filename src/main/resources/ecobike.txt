@@ -1001,3 +1001,4 @@ E-BIKE Ferrari; 60; 28900; false; 21000; brown; 825
 FOLDING BIKE asd; 55; 5; 2; true; 5; 5
 E-BIKE df; 55; 6; true; 5; 5; 5
 E-BIKE Lolol; 3; 33; false; 3; 33; 3
+FOLDING BIKE sda; 5; 5; 5; true; ytyt; 5

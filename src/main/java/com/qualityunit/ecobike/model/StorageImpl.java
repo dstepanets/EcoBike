@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public class StorageImpl implements Storage {
 	private static StorageImpl instance;
-	private final List<AbstractBike> catalog;
+	private List<AbstractBike> catalog;
 	private boolean isUpdated = false;
 
 	private StorageImpl() {

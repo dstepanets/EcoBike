@@ -10,7 +10,7 @@ import static com.qualityunit.ecobike.model.CatalogPage.*;
 import static java.lang.System.*;
 
 public class ShowCatalogCommand extends MenuCommand {
-	private final List<AbstractBike> catalog;
+	private List<AbstractBike> catalog;
 	private int totalItems;
 	private int totalPages;
 	private CatalogPage page;

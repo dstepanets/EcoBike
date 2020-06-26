@@ -2,7 +2,6 @@ package com.qualityunit.ecobike.controller.command;
 
 import com.qualityunit.ecobike.model.AbstractBike;
 import com.qualityunit.ecobike.model.CatalogPage;
-import com.qualityunit.ecobike.model.Storage;
 import com.qualityunit.ecobike.view.Menu;
 
 import java.util.List;
@@ -16,9 +15,9 @@ public class ShowCatalogCommand extends MenuCommand {
 	private int totalPages;
 	private CatalogPage page;
 
-	public ShowCatalogCommand(String description, Menu menu) {
+	public ShowCatalogCommand(String description, Menu menu, List<AbstractBike> catalog) {
 		super(description, menu);
-		catalog = Storage.getInstance().getCatalog();
+		this.catalog = catalog;
 	}
 
 	@Override

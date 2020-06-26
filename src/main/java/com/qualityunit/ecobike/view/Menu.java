@@ -13,6 +13,7 @@ import com.qualityunit.ecobike.model.CatalogPage;
 import com.qualityunit.ecobike.model.ElectricBike;
 import com.qualityunit.ecobike.model.FoldingBike;
 import com.qualityunit.ecobike.model.Storage;
+import com.qualityunit.ecobike.model.StorageImpl;
 
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -32,14 +33,15 @@ public class Menu {
 
 	public Menu(Path inputFilePath, UserInput userInput) {
 		this.userInput = userInput;
+		Storage storage = StorageImpl.getInstance();
+
 		numToCommand = new LinkedHashMap<>();
-		numToCommand.put(1, new ShowCatalogCommand("Show the entire EcoBike catalog", this));
+		numToCommand.put(1, new ShowCatalogCommand("Show the entire EcoBike catalog", this, storage.getCatalog()));
 		numToCommand.put(2, new AddItemCommand("Add a new folding bike", BikeType.FOLDING_BIKE, this));
 		numToCommand.put(3, new AddItemCommand("Add a new speedelec", BikeType.SPEEDELEC, this));
 		numToCommand.put(4, new AddItemCommand("Add a new e-bike", BikeType.EBIKE, this));
-		numToCommand.put(5, new FindItemCommand("Find the first item of a particular brand",
-														this, Storage.getInstance().getCatalog()));
-		numToCommand.put(6, new WriteToFileCommand("Write to file", inputFilePath, this));
+		numToCommand.put(5, new FindItemCommand("Find the first item of a particular brand", this, storage));
+		numToCommand.put(6, new WriteToFileCommand("Write to file", inputFilePath, this, storage.getCatalog()));
 		numToCommand.put(7, new StopProgramCommand("Stop the program", this));
 
 		menuText = buildMenuText();
@@ -145,8 +147,8 @@ public class Menu {
 
 	public void displaySearchResult(Optional<AbstractBike> result) {
 		String s = "= = = = = SEARCH RESULT = = = = =\n" +
-				result.map(bike -> ("ITEM IS FOUND!\n" + bike.toDisplayFormatString()) + "\n")
-						.orElse("Item is not found :(\n") +
+				result.map(bike -> ("\t\tItem is found!\n" + bike.toDisplayFormatString()) + "\n")
+						.orElse("\t\tItem is not found :(\n") +
 				"= = = = = = = = = = = = = = = = =";
 		out.println(s);
 	}

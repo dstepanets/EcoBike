@@ -1,7 +1,7 @@
 package com.qualityunit.ecobike.controller.command;
 
 import com.qualityunit.ecobike.model.AbstractBike;
-import com.qualityunit.ecobike.model.Storage;
+import com.qualityunit.ecobike.model.StorageImpl;
 import com.qualityunit.ecobike.view.Menu;
 import com.qualityunit.ecobike.view.UserInput;
 
@@ -16,6 +16,7 @@ import static java.lang.System.err;
 import static java.lang.System.out;
 
 public class WriteToFileCommand extends MenuCommand {
+	private final List<AbstractBike> catalog;
 	private static final String PATH_PROMPT =
 					"Enter the path to save the catalog file to:\n" +
 					"(Can be absolute or relative to the app root (where pom.xml is located).\n" +
@@ -24,15 +25,16 @@ public class WriteToFileCommand extends MenuCommand {
 	private final Path inputFilePath;
 	private final UserInput userInput;
 
-	public WriteToFileCommand(String description, Path inputFilePath, Menu menu) {
+	public WriteToFileCommand(String description, Path inputFilePath, Menu menu, List<AbstractBike> catalog) {
 		super(description, menu);
 		this.inputFilePath = inputFilePath;
 		userInput = getMenu().getUserInput();
+		this.catalog = catalog;
 	}
 
 	@Override
 	public void execute() {
-		if (!Storage.getInstance().isUpdated()) {
+		if (!StorageImpl.getInstance().isUpdated()) {
 			out.println("No new data to save");
 			return;
 		}
@@ -54,7 +56,7 @@ public class WriteToFileCommand extends MenuCommand {
 			writeToFile(pathStr);
 		}
 
-		Storage.getInstance().setUpdated(false);
+		StorageImpl.getInstance().setUpdated(false);
 	}
 
 	private void writeToFile(String pathStr) {
@@ -66,7 +68,6 @@ public class WriteToFileCommand extends MenuCommand {
 			if (!confirmed) return;
 		}
 
-		List<AbstractBike> catalog = Storage.getInstance().getCatalog();
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
 			for (AbstractBike b : catalog) {
 				bw.append(b.toString());

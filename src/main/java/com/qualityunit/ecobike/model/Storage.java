@@ -1,39 +1,16 @@
 package com.qualityunit.ecobike.model;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
-public class Storage {
-	private static Storage storageInstance;
-	private final List<AbstractBike> catalog;
-	private boolean isUpdated = false;
+public interface Storage {
+	List<AbstractBike> getCatalog();
 
-	private Storage() {
-		catalog = Collections.synchronizedList(new ArrayList<>());
-	}
+	void addBike(AbstractBike bike);
 
-	public static synchronized Storage getInstance() {
-		if (storageInstance == null) {
-			storageInstance = new Storage();
-		}
-		return storageInstance;
-	}
+	boolean isUpdated();
 
-	public List<AbstractBike> getCatalog() {
-		return catalog;
-	}
+	void setUpdated(boolean updated);
 
-	public synchronized void addBike(AbstractBike bike) {
-		catalog.add(bike);
-		isUpdated = true;
-	}
-
-	public boolean isUpdated() {
-		return isUpdated;
-	}
-
-	public void setUpdated(boolean updated) {
-		isUpdated = updated;
-	}
+	Optional<AbstractBike> findItem(AbstractBike query);
 }

@@ -5,18 +5,16 @@ import com.qualityunit.ecobike.model.BikeType;
 import com.qualityunit.ecobike.model.Storage;
 import com.qualityunit.ecobike.view.Menu;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import static java.lang.System.out;
 
 public class FindItemCommand extends MenuCommand {
-	private final List<AbstractBike> catalog;
+	private final Storage storage;
 
-	public FindItemCommand(String description, Menu menu, List<AbstractBike> catalog) {
+	public FindItemCommand(String description, Menu menu, Storage storage) {
 		super(description, menu);
-		this.catalog = catalog;
+		this.storage = storage;
 	}
 
 	@Override
@@ -26,27 +24,14 @@ public class FindItemCommand extends MenuCommand {
 
 		out.println("Search may take time. Meanwhile, you can continue using the app.");
 		Thread searchThread = new Thread(() -> {
-			long startTime = System.nanoTime();
-			Optional<AbstractBike> result = findItem(query);
-			long endTime = System.nanoTime();
-			out.println("Search time: " + (endTime - startTime));
+
+//			long startTime = System.nanoTime();
+			Optional<AbstractBike> result = storage.findItem(query);
+//			long endTime = System.nanoTime();
+//			out.println("Search time: " + (endTime - startTime));
 
 			getMenu().displaySearchResult(result);
 		});
 		searchThread.start();
-	}
-
-	private Optional<AbstractBike> findItem(AbstractBike query) {
-		synchronized (catalog) {
-//			try {
-//				Thread.sleep(20_000L);
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-			return catalog.stream()
-					.sorted()
-					.filter(b -> b.equals(query))
-					.findFirst();
-		}
 	}
 }

@@ -21,6 +21,7 @@ public class ElectricBike extends AbstractBike {
 		private int batteryCapacity;
 
 		public AbstractBike build() {
+			validateFieldsBeforeBuild();
 			return new ElectricBike(this);
 		}
 
@@ -30,19 +31,24 @@ public class ElectricBike extends AbstractBike {
 		}
 
 		public ElectricBikeBuilder withMaxSpeed(int maxSpeed) {
-			if (maxSpeed < 0) {
-				throw new BikeBuildingException("Maximum speed can't be negative");
-			}
 			this.maxSpeed = maxSpeed;
 			return this;
 		}
 
 		public ElectricBikeBuilder withBatteryCapacity(int batteryCapacity) {
+			this.batteryCapacity = batteryCapacity;
+			return this;
+		}
+
+		@Override
+		protected void validateFieldsBeforeBuild() {
+			super.validateFieldsBeforeBuild();
+			if (maxSpeed < 0) {
+				throw new BikeBuildingException("Maximum speed can't be negative");
+			}
 			if (batteryCapacity < 0) {
 				throw new BikeBuildingException("Battery capacity speed can't be negative");
 			}
-			this.batteryCapacity = batteryCapacity;
-			return this;
 		}
 	}
 

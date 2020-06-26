@@ -1,8 +1,6 @@
 package com.qualityunit.ecobike.model;
 
-import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -12,8 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -32,15 +28,11 @@ public class StorageTest {
 		i.set(storage, null);
 		storage = StorageImpl.getInstance();
 //		reset collection
-		buildTestCatalog();
+		catalog = buildTestCatalog();
 //		set catalog to the test one
 		Field c = StorageImpl.class.getDeclaredField("catalog");
 		c.setAccessible(true);
 		c.set(storage, this.catalog);
-	}
-
-	@After
-	public void tearDown() {
 	}
 
 	@Test
@@ -121,9 +113,32 @@ public class StorageTest {
 		assertEquals(initialSize, storage.getCatalog().size());
 	}
 
-	private void buildTestCatalog() {
-		catalog = new ArrayList<>();
-		catalog.add(FoldingBike.getBuilder()
+	@Test
+	public void addBike_ShouldNotWorkWhileSearchInProgress() {
+		AbstractBike bike = catalog.get(0);
+		for (int i = 0; i < 9_999_995; i++) {
+			catalog.add(bike);
+		}
+
+		assertEquals(10_000_000, storage.getCatalog().size());
+
+		AbstractBike query = ElectricBike.getBuilder()
+				.withBikeType(BikeType.SPEEDELEC)
+				.withBrand("NoSuchbrand")
+				.withColor("").build();
+		Thread thread = new Thread(() -> {
+			Optional<AbstractBike> result = storage.findItem(query);
+			assertFalse(result.isPresent());
+			assertEquals(10_000_000, storage.getCatalog().size());
+		});
+		thread.start();
+		storage.addBike(query);
+		assertEquals(10_000_001, storage.getCatalog().size());
+	}
+
+	private List<AbstractBike> buildTestCatalog() {
+		List<AbstractBike> list = new ArrayList<>();
+		list.add(FoldingBike.getBuilder()
 				.withBikeType(BikeType.FOLDING_BIKE)
 				.withBrand("SkyBike")
 				.withWeight(12000)
@@ -133,7 +148,7 @@ public class StorageTest {
 				.withWheelSize(24)
 				.withGearsNum(7)
 				.build());
-		catalog.add(ElectricBike.getBuilder()
+		list.add(ElectricBike.getBuilder()
 				.withBikeType(BikeType.EBIKE)
 				.withBrand("Mando")
 				.withWeight(15000)
@@ -143,7 +158,7 @@ public class StorageTest {
 				.withMaxSpeed(25)
 				.withBatteryCapacity(22000)
 				.build());
-		catalog.add(ElectricBike.getBuilder()
+		list.add(ElectricBike.getBuilder()
 				.withBikeType(BikeType.SPEEDELEC)
 				.withBrand("Gazelle")
 				.withWeight(11000)
@@ -153,7 +168,7 @@ public class StorageTest {
 				.withMaxSpeed(50)
 				.withBatteryCapacity(32000)
 				.build());
-		catalog.add(ElectricBike.getBuilder()
+		list.add(ElectricBike.getBuilder()
 				.withBikeType(BikeType.EBIKE)
 				.withBrand("Mando")
 				.withWeight(11000)
@@ -163,7 +178,7 @@ public class StorageTest {
 				.withMaxSpeed(30)
 				.withBatteryCapacity(22000)
 				.build());
-		catalog.add(FoldingBike.getBuilder()
+		list.add(FoldingBike.getBuilder()
 				.withBikeType(BikeType.FOLDING_BIKE)
 				.withBrand("SkyBike")
 				.withWeight(9000)
@@ -173,5 +188,6 @@ public class StorageTest {
 				.withWheelSize(20)
 				.withGearsNum(7)
 				.build());
+		return list;
 	}
 }

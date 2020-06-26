@@ -1,40 +1,36 @@
 package com.qualityunit.ecobike.controller.command;
 
 import com.qualityunit.ecobike.model.AbstractBike;
-import com.qualityunit.ecobike.model.StorageImpl;
+import com.qualityunit.ecobike.model.Storage;
 import com.qualityunit.ecobike.view.Menu;
-import com.qualityunit.ecobike.view.UserInput;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.List;
 
 import static java.lang.System.err;
 import static java.lang.System.out;
 
 public class WriteToFileCommand extends MenuCommand {
-	private final List<AbstractBike> catalog;
+	private final Storage storage;
 	private static final String PATH_PROMPT =
-					"Enter the path to save the catalog file to:\n" +
-					"(Can be absolute or relative to the app root (where pom.xml is located).\n" +
-					"Should include the file name and extension)";
+			"Enter the path to save the catalog file to:\n" +
+			"(Can be absolute or relative to the app root (where pom.xml is located).\n" +
+			"Should include the file name and extension)";
 	private boolean isSaved = false;
 	private final Path inputFilePath;
-	private final UserInput userInput;
 
-	public WriteToFileCommand(String description, Path inputFilePath, Menu menu, List<AbstractBike> catalog) {
+	public WriteToFileCommand(String description, Path inputFilePath, Menu menu, Storage storage) {
 		super(description, menu);
 		this.inputFilePath = inputFilePath;
-		userInput = getMenu().getUserInput();
-		this.catalog = catalog;
+		this.storage = storage;
 	}
 
 	@Override
 	public void execute() {
-		if (!StorageImpl.getInstance().isUpdated()) {
+		if (!storage.isUpdated()) {
 			out.println("No new data to save");
 			return;
 		}
@@ -45,7 +41,7 @@ public class WriteToFileCommand extends MenuCommand {
 			String pathStr = null;
 			switch (option) {
 				case 1:
-					pathStr = userInput.getLine(PATH_PROMPT);
+					pathStr = getMenu().getUserInput().getLine(PATH_PROMPT);
 					break;
 				case 2:
 					pathStr = inputFilePath.toString();
@@ -56,7 +52,7 @@ public class WriteToFileCommand extends MenuCommand {
 			writeToFile(pathStr);
 		}
 
-		StorageImpl.getInstance().setUpdated(false);
+		storage.setUpdated(false);
 	}
 
 	private void writeToFile(String pathStr) {
@@ -64,12 +60,12 @@ public class WriteToFileCommand extends MenuCommand {
 		out.println("--> Writing to: " + file.getAbsolutePath());
 		if (file.isFile()) {
 			String prompt = String.format("Sure you want to overwrite the file '%s'?", file.getAbsolutePath());
-			boolean confirmed = userInput.getBoolean(prompt, false);
+			boolean confirmed = getMenu().getUserInput().getBoolean(prompt, false);
 			if (!confirmed) return;
 		}
 
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
-			for (AbstractBike b : catalog) {
+			for (AbstractBike b : storage.getCatalog()) {
 				bw.append(b.toString());
 				bw.newLine();
 			}

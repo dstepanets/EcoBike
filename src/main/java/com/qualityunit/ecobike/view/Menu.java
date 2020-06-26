@@ -41,7 +41,7 @@ public class Menu {
 		numToCommand.put(3, new AddItemCommand("Add a new speedelec", BikeType.SPEEDELEC, this));
 		numToCommand.put(4, new AddItemCommand("Add a new e-bike", BikeType.EBIKE, this));
 		numToCommand.put(5, new FindItemCommand("Find the first item of a particular brand", this, storage));
-		numToCommand.put(6, new WriteToFileCommand("Write to file", inputFilePath, this, storage.getCatalog()));
+		numToCommand.put(6, new WriteToFileCommand("Write to file", inputFilePath, this, storage));
 		numToCommand.put(7, new StopProgramCommand("Stop the program", this));
 
 		menuText = buildMenuText();
@@ -49,14 +49,6 @@ public class Menu {
 
 	public UserInput getUserInput() {
 		return userInput;
-	}
-
-	private String buildMenuText() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(SEPARATOR).append("\n").append("Please make your choice:\n");
-		numToCommand.forEach((k, c) -> sb.append(k).append(" - ").append(c.getDescription()).append("\n"));
-		sb.append(SEPARATOR);
-		return sb.toString();
 	}
 
 	public Executable getCommandFromUser() {
@@ -159,5 +151,13 @@ public class Menu {
 				"3 - Cancel";
 		out.println(s);
 		return userInput.getIntInRange(ENTER_A_NUMBER, 1, 3, false);
+	}
+
+	private String buildMenuText() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(SEPARATOR).append("\n").append("Please make your choice:\n");
+		numToCommand.forEach((k, c) -> sb.append(k).append(" - ").append(c.getDescription()).append("\n"));
+		sb.append(SEPARATOR);
+		return sb.toString();
 	}
 }

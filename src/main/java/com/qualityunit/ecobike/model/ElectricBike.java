@@ -52,6 +52,14 @@ public class ElectricBike extends AbstractBike {
 		}
 	}
 
+	public int getMaxSpeed() {
+		return maxSpeed;
+	}
+
+	public int getBatteryCapacity() {
+		return batteryCapacity;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

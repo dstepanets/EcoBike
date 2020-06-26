@@ -21,6 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static java.lang.System.err;
 import static java.lang.System.out;
 
 public class Menu {
@@ -122,6 +123,9 @@ public class Menu {
 						.withBatteryCapacity(userInput.getIntInRange("Enter the battery capacity (in mAh):",
 								0, Integer.MAX_VALUE, isSearchQuery))
 						.build();
+				break;
+			default:
+				err.println("Unknown type of bike");
 				break;
 		}
 		return bike;

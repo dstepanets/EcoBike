@@ -52,6 +52,14 @@ public class FoldingBike extends AbstractBike {
 		}
 	}
 
+	public int getWheelSize() {
+		return wheelSize;
+	}
+
+	public int getGearsNum() {
+		return gearsNum;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

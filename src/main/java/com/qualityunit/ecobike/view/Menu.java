@@ -1,5 +1,6 @@
 package com.qualityunit.ecobike.view;
 
+import com.qualityunit.ecobike.controller.AppController;
 import com.qualityunit.ecobike.controller.command.AddItemCommand;
 import com.qualityunit.ecobike.controller.command.Executable;
 import com.qualityunit.ecobike.controller.command.FindItemCommand;
@@ -32,7 +33,7 @@ public class Menu {
 	private final Map<Integer, MenuCommand> numToCommand;
 	private final String menuText;
 
-	public Menu(Path inputFilePath, UserInput userInput) {
+	public Menu(Path inputFilePath, UserInput userInput, AppController controller) {
 		this.userInput = userInput;
 		Storage storage = StorageImpl.getInstance();
 
@@ -43,7 +44,7 @@ public class Menu {
 		numToCommand.put(4, new AddItemCommand("Add a new e-bike", BikeType.EBIKE, this));
 		numToCommand.put(5, new FindItemCommand("Find the first item of a particular brand", this, storage));
 		numToCommand.put(6, new WriteToFileCommand("Write to file", inputFilePath, this, storage));
-		numToCommand.put(7, new StopProgramCommand("Stop the program", this));
+		numToCommand.put(7, new StopProgramCommand("Stop the program", this, controller));
 
 		menuText = buildMenuText();
 	}
@@ -78,6 +79,11 @@ public class Menu {
 		return userInput.getLine(prompt);
 	}
 
+	/*
+	 * Used both for adding new item and building a search query. In the first case, all fields
+	 * are required. In the second, only type and brand are mandatory and all the other params are
+	 * filled by 'optional' versions of UserInput methods.
+	 */
 	public AbstractBike constructBikeFromUserInput(BikeType bikeType, boolean isSearchQuery) {
 		if (isSearchQuery) {
 			out.println("NEW SEARCH QUERY");

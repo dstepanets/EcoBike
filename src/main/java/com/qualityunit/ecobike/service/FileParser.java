@@ -29,6 +29,11 @@ public class FileParser {
 	private String currentLine;
 	private long lineCount;
 
+	/*
+	* Parses first column of each line with the regex to extract a product type and a brand name.
+	* Keeps line count and prints the message with an invalid line number and a reason of error.
+	* Invalid lines are skipped.
+	*/
 	public long parseLinesStreamToStorage(Stream<String> stream, List<AbstractBike> catalog) {
 		lineCount = 0;
 		final Pattern pattern = Pattern.compile(TYPE_BRAND_REGEX);
@@ -52,6 +57,10 @@ public class FileParser {
 		return lineCount;
 	}
 
+	/*
+	* Other columns are validated by a) Integer.parseInt() method; b) by builders of the corresponding
+	* model class.
+	*/
 	private Optional<AbstractBike> buildBikeFromLine(String bikeTypeId, String brandName, String[] arr) {
 		AbstractBike bike = null;
 		try {
@@ -82,6 +91,9 @@ public class FileParser {
 							.withPrice(Integer.parseInt(arr[6]))
 							.build();
 					break;
+				default:
+					err.println("Unknown type of bike");
+					break;
 			}
 		} catch (NumberFormatException e) {
 			printParsingError("Invalid number: " + e.getMessage());
@@ -91,6 +103,10 @@ public class FileParser {
 		return Optional.ofNullable(bike);
 	}
 
+	/*
+	* Library method parseBoolean() returns 'false' on everything that is not a word 'true',
+	* so I needed a way to tell if the input even represents a boolean in the first place.
+	*/
 	private Boolean parseBooleanWithException(String s) {
 		if (Boolean.parseBoolean(s)) {
 			return true;
@@ -100,6 +116,10 @@ public class FileParser {
 		throw new IllegalArgumentException("Boolean is expected in place of '" + s + "'");
 	}
 
+	/*
+	* Builder doesn't check for empty color string because such string is used in
+	* the search query object to represent undefined search parameter.
+	*/
 	private String checkForEmptyColor(String s) {
 		if (s == null || s.trim().isEmpty()) {
 			throw new IllegalArgumentException("Color field can't be empty");

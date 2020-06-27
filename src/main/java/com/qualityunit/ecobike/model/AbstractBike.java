@@ -59,6 +59,9 @@ public abstract class AbstractBike implements Comparable<AbstractBike> {
 			return getThis();
 		}
 
+		/*
+		* Called from the build() method in subclasses.
+		*/
 		protected void validateFieldsBeforeBuild() {
 			if (this.bikeType == null) {
 				throw new BikeBuildingException("Bike type is not set");

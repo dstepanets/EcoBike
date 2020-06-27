@@ -59,8 +59,6 @@ public class ShowCatalogCommandTest {
 
 		command.execute();
 
-		CatalogPage page = getPage();
-
 		testPage(getPage(), 1);
 }
 

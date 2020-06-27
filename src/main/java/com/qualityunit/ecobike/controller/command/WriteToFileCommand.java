@@ -13,6 +13,10 @@ import java.nio.file.Path;
 import static java.lang.System.err;
 import static java.lang.System.out;
 
+/*
+ * Gives an option to overwrite the file used for data input or to specify the path to a new file.
+ * Loops until data is either written successfully or cancel command is received.
+ */
 public class WriteToFileCommand extends MenuCommand {
 	private final Storage storage;
 	private static final String PATH_PROMPT =
@@ -48,6 +52,9 @@ public class WriteToFileCommand extends MenuCommand {
 					break;
 				case 3:
 					return;
+				default:
+					err.println("Invalid option");
+					break;
 			}
 			writeToFile(pathStr);
 		}

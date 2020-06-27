@@ -48,7 +48,7 @@ public class WriteToFileCommandTest {
 	private final PrintStream backupErr = System.err;
 
 	@Rule
-	public TemporaryFolder folder = TemporaryFolder.builder().build();
+	public final TemporaryFolder folder = TemporaryFolder.builder().build();
 
 	@Before
 	public void setUp() throws Exception {

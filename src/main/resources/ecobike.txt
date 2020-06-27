@@ -1005,3 +1005,4 @@ FOLDING BIKE sda; 5; 5; 5; true; ytyt; 5
 FOLDING BIKE asd; 4; 4; 2; true; 4; 4
 E-BIKE 4; 5; 2; false; 5; 23; 4
 SPEEDELEC hgfh; 67; 6; false; 575; 7; 6575
+FOLDING BIKE asd; 5; 5; 4; true; tt; 5

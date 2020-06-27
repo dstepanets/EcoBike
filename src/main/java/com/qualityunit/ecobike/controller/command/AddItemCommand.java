@@ -16,6 +16,7 @@ public class AddItemCommand extends MenuCommand {
 	@Override
 	public void execute() {
 		AbstractBike bike = getMenu().constructBikeFromUserInput(bikeType, false);
+		/* blocks if the search is ongoing */
 		StorageImpl.getInstance().addBike(bike);
 		System.out.println("The item was added to the catalog");
 	}

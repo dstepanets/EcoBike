@@ -24,11 +24,7 @@ public class FindItemCommand extends MenuCommand {
 
 		out.println("Search may take time. Meanwhile, you can continue using the app.");
 		Thread searchThread = new Thread(() -> {
-
-//			long startTime = System.nanoTime();
 			Optional<AbstractBike> result = storage.findItem(query);
-//			long endTime = System.nanoTime();
-//			out.println("Search time: " + (endTime - startTime));
 
 			getMenu().displaySearchResult(result);
 		});

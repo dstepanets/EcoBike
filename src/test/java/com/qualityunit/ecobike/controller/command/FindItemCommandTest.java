@@ -4,7 +4,6 @@ import com.qualityunit.ecobike.model.AbstractBike;
 import com.qualityunit.ecobike.model.BikeType;
 import com.qualityunit.ecobike.model.ElectricBike;
 import com.qualityunit.ecobike.model.Storage;
-import com.qualityunit.ecobike.model.StorageImpl;
 import com.qualityunit.ecobike.view.Menu;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +14,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Optional;
 
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -52,10 +51,10 @@ public class FindItemCommandTest {
 
 		command.execute();
 
-		verify(menu, times(1)).chooseBikeType();
-		verify(menu, times(1)).constructBikeFromUserInput(bike.getBikeType(), true);
-		verify(storage, times(1)).findItem(bike);
-		verify(menu, times(1)).displaySearchResult(Optional.ofNullable(bike));
+		verify(menu).chooseBikeType();
+		verify(menu).constructBikeFromUserInput(bike.getBikeType(), true);
+		verify(storage, timeout(100)).findItem(bike);
+		verify(menu).displaySearchResult(Optional.ofNullable(bike));
 		verifyNoMoreInteractions(menu, storage);
 	}
 }

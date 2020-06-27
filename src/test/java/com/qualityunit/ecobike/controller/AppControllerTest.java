@@ -39,7 +39,7 @@ public class AppControllerTest {
 	private final PrintStream backupErr = System.err;
 
 	@Rule
-	public TemporaryFolder folder = TemporaryFolder.builder().build();
+	public final TemporaryFolder folder = TemporaryFolder.builder().build();
 
 	@Before
 	public void setUp() {
@@ -53,7 +53,7 @@ public class AppControllerTest {
 	}
 
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() {
 		System.setOut(new PrintStream(backupOut));
 		System.setErr(new PrintStream(backupErr));
 	}

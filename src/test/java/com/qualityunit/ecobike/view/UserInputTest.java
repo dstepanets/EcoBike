@@ -117,7 +117,6 @@ public class UserInputTest {
 
 	@Test
 	public void getInt_InputNotAValidNumber_ThrowsException() {
-		int expected = -25;
 		String input = "not a-25number";
 
 		mockStdInput(input);

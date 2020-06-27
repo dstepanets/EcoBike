@@ -9,8 +9,12 @@ import java.util.List;
 import static com.qualityunit.ecobike.model.CatalogPage.*;
 import static java.lang.System.*;
 
+/*
+* Calculates and validates parameters of a catalog page, builds it and sends for printing
+* to the Menu object.
+*/
 public class ShowCatalogCommand extends MenuCommand {
-	private List<AbstractBike> catalog;
+	private final List<AbstractBike> catalog;
 	private int totalItems;
 	private int totalPages;
 	private CatalogPage page;
@@ -36,6 +40,7 @@ public class ShowCatalogCommand extends MenuCommand {
 
 	private void loadPage(int pageNum) {
 		if (page == null || pageNum != page.getCurrentPage()) {
+			/* sets out of range page numbers to min or max */
 			pageNum = pageNum < 1 ? 1 : Math.min(pageNum, totalPages);
 			int firstIdx = (pageNum - 1) * ITEMS_PER_PAGE;
 			int lastItemNum = Math.min(firstIdx + ITEMS_PER_PAGE, totalItems);
@@ -51,6 +56,7 @@ public class ShowCatalogCommand extends MenuCommand {
 		sendPageToViewAndProcessControls(page);
 	}
 
+	/* Receives user commands from the Menu and triggers loading of the requested page. */
 	private void sendPageToViewAndProcessControls(CatalogPage page) {
 		Integer pageNum = null;
 		while (pageNum == null) {

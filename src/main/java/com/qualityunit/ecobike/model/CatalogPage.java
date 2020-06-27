@@ -2,6 +2,9 @@ package com.qualityunit.ecobike.model;
 
 import java.util.List;
 
+/*
+* Encapsulates all data to print in Menu class as a catalog page.
+*/
 public class CatalogPage {
 	public static final int ITEMS_PER_PAGE = 20;
 	private final int currentPage;

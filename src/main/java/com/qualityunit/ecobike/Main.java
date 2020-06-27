@@ -10,6 +10,10 @@ import com.qualityunit.ecobike.view.UserInput;
 import java.util.List;
 import java.util.stream.Stream;
 
+/*
+* Instantiates controller and storage objects, invokes file parsing, then
+* passes control to AppController which runs app in a loop.
+*/
 public class Main {
 
 	public static void main(String[] args) {

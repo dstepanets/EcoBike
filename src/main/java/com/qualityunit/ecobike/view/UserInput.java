@@ -6,6 +6,12 @@ import static java.lang.System.err;
 import static java.lang.System.in;
 import static java.lang.System.out;
 
+/*
+* Scanner util methods that loop forcing user to provide valid input.
+* If flag isOptional is set 'true' empty line is a valid input. This is used
+* to build the search query with omitted parameters. Undefined string is empty,
+* undefined int param is 0, and if a boolean is skipped the corresponding method returns null.
+*/
 public class UserInput {
 	private final Scanner scanner = new Scanner(in);
 	public static final String INVALID_INPUT = "Invalid input";

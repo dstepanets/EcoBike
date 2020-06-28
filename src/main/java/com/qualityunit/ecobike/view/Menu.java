@@ -149,8 +149,8 @@ public class Menu {
 
 	public void displaySearchResult(Optional<AbstractBike> result) {
 		String s = "= = = = = SEARCH RESULT = = = = =\n" +
-				result.map(bike -> ("\t\tItem is found!\n" + bike.toDisplayFormatString()) + "\n")
-						.orElse("\t\tItem is not found :(\n") +
+				result.map(bike -> ("\tItem is found!\n" + bike.toDisplayFormatString()) + "\n")
+						.orElse("\tItem is not found :(\n") +
 				"= = = = = = = = = = = = = = = = =";
 		out.println(s);
 	}

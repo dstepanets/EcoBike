@@ -3,12 +3,16 @@ package com.qualityunit.ecobike.view;
 import com.qualityunit.ecobike.model.AbstractBike;
 import com.qualityunit.ecobike.model.BikeType;
 import com.qualityunit.ecobike.model.FoldingBike;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -26,6 +30,9 @@ public class MenuTest {
 	private Menu menu;
 	private FoldingBike bike;
 
+	private final PrintStream backupOut = System.out;
+	private final ByteArrayOutputStream testOut = new ByteArrayOutputStream();
+
 	@Before
 	public void setUp() {
 		bike = FoldingBike.getBuilder()
@@ -38,6 +45,12 @@ public class MenuTest {
 				.withWheelSize(20)
 				.withGearsNum(7)
 				.build();
+		System.setOut(new PrintStream(testOut));
+	}
+
+	@After
+	public void tearDown() {
+		System.setOut(new PrintStream(backupOut));
 	}
 
 	@Test

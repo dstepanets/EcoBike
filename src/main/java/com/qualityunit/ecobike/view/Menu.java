@@ -1,6 +1,5 @@
 package com.qualityunit.ecobike.view;
 
-import com.qualityunit.ecobike.controller.AppController;
 import com.qualityunit.ecobike.controller.command.AddItemCommand;
 import com.qualityunit.ecobike.controller.command.Executable;
 import com.qualityunit.ecobike.controller.command.FindItemCommand;
@@ -33,7 +32,7 @@ public class Menu {
 	private final Map<Integer, MenuCommand> numToCommand;
 	private final String menuText;
 
-	public Menu(Path inputFilePath, UserInput userInput, AppController controller) {
+	public Menu(Path inputFilePath, UserInput userInput) {
 		this.userInput = userInput;
 		Storage storage = StorageImpl.getInstance();
 
@@ -44,7 +43,7 @@ public class Menu {
 		numToCommand.put(4, new AddItemCommand("Add a new e-bike", BikeType.EBIKE, this));
 		numToCommand.put(5, new FindItemCommand("Find the first item of a particular brand", this, storage));
 		numToCommand.put(6, new WriteToFileCommand("Write to file", inputFilePath, this, storage));
-		numToCommand.put(7, new StopProgramCommand("Stop the program", this, controller));
+		numToCommand.put(7, new StopProgramCommand("Stop the program", this));
 
 		menuText = buildMenuText();
 	}

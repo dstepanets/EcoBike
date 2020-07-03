@@ -1,17 +1,14 @@
 package com.qualityunit.ecobike.controller.command;
 
-import com.qualityunit.ecobike.controller.AppController;
 import com.qualityunit.ecobike.model.StorageImpl;
 import com.qualityunit.ecobike.view.Menu;
 import com.qualityunit.ecobike.view.UserInput;
 
-import static java.lang.System.*;
+import static java.lang.System.out;
 
 public class StopProgramCommand extends MenuCommand {
-	private final AppController controller;
-	public StopProgramCommand(String description, Menu menu, AppController controller) {
+	public StopProgramCommand(String description, Menu menu) {
 		super(description, menu);
-		this.controller = controller;
 	}
 
 	@Override
@@ -25,6 +22,6 @@ public class StopProgramCommand extends MenuCommand {
 			}
 		}
 		userInput.closeScanner();
-		controller.stopProgram();
+		System.exit(0);
 	}
 }

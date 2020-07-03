@@ -11,23 +11,23 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
-import static java.lang.System.*;
+import static java.lang.System.err;
+import static java.lang.System.out;
 
 public class AppController {
 	private final UserInput userInput;
 	private Path inputFilePath;
 	private static final String FILE_PATH_PROMPT = "Please enter the input file path:";
 	private static final String OPEN_ERROR_MSG = "Can't open a file at this path: '%s'";
-	private boolean isRunning;
 
 	public AppController(UserInput userInput) {
 		this.userInput = userInput;
 	}
 
 	/*
-	* Tries to get an input file path from command line arguments. If there is none or
-	* it's invalid then get the path from user's input. Loop until the stream is obtained from file.
-	*/
+	 * Tries to get an input file path from command line arguments. If there is none or
+	 * it's invalid then get the path from user's input. Loop until the stream is obtained from file.
+	 */
 	public Stream<String> getStreamFromFilePath(String[] args) {
 		String pathStr = (args.length > 0) ? args[0] : userInput.getLine(FILE_PATH_PROMPT);
 		Stream<String> stream = null;
@@ -45,14 +45,9 @@ public class AppController {
 	}
 
 	public void runMenu() {
-		Menu menu = new Menu(inputFilePath, userInput, this);
-		isRunning = true;
-		while (isRunning) {
+		Menu menu = new Menu(inputFilePath, userInput);
+		while (true) {
 			menu.getCommandFromUser().execute();
 		}
-	}
-
-	public void stopProgram() {
-		isRunning = false;
 	}
 }

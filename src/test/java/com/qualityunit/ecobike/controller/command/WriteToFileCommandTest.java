@@ -44,6 +44,8 @@ public class WriteToFileCommandTest {
 	private File testFile;
 	private WriteToFileCommand command;
 
+	private final ByteArrayOutputStream testOut = new ByteArrayOutputStream();
+	private final PrintStream backupOut = System.out;
 	private final ByteArrayOutputStream testErr = new ByteArrayOutputStream();
 	private final PrintStream backupErr = System.err;
 
@@ -55,11 +57,13 @@ public class WriteToFileCommandTest {
 		catalog = buildTestCatalog();
 		testFile = folder.newFile("testFile.txt");
 		command = new WriteToFileCommand("", testFile.toPath(), menu, storage);
+		System.setOut(new PrintStream(testOut));
 		System.setErr(new PrintStream(testErr));
 	}
 
 	@After
 	public void tearDown() {
+		System.setOut(new PrintStream(backupOut));
 		System.setErr(new PrintStream(backupErr));
 	}
 

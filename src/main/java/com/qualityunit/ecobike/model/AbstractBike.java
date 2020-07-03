@@ -60,8 +60,8 @@ public abstract class AbstractBike implements Comparable<AbstractBike> {
 		}
 
 		/*
-		* Called from the build() method in subclasses.
-		*/
+		 * Called from the build() method in subclasses.
+		 */
 		protected void validateFieldsBeforeBuild() {
 			if (this.bikeType == null) {
 				throw new BikeBuildingException("Bike type is not set");
@@ -113,7 +113,7 @@ public abstract class AbstractBike implements Comparable<AbstractBike> {
 		return bikeType == other.bikeType &&
 				brand.equals(other.brand) &&
 				(other.weight == 0 || weight == other.weight) &&
-				(other.hasLights == null || hasLights == other.hasLights) &&
+				(other.hasLights == null || hasLights.equals(other.hasLights)) &&
 				(other.color.isEmpty() || color.equals(other.color)) &&
 				(other.price == 0 || price == other.price);
 	}
